@@ -14,7 +14,7 @@ Implement user authentication system using auth.js with username/password creden
 **Language/Version**: TypeScript 5.6.3  
 **Primary Dependencies**: Next.js 15.1.0, React 18.3.1, auth.js (latest compatible), drizzle-orm (latest compatible), @auth/drizzle-adapter (latest compatible)  
 **Storage**: PostgreSQL, connection string via .env file, postgres.js driver  
-**Testing**: est with testing-library, integration test framework  
+**Testing**: NEEDS CLARIFICATION - Jest/Vitest with testing-library, integration test framework  
 **Target Platform**: Web (Next.js App Router), Node.js server  
 **Project Type**: web  
 **Performance Goals**: Registration <30s, sign in <3s (per spec SC-001, SC-002), API response <200ms p95 (per constitution)  
@@ -25,26 +25,53 @@ Implement user authentication system using auth.js with username/password creden
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-### I. Component-First
+### Pre-Design Assessment
+
+#### I. Component-First
 ✅ **PASS**: Authentication will be implemented as reusable components (auth forms, protected route wrapper) that can be composed into larger features.
 
-### II. API/Route Interface
+#### II. API/Route Interface
 ✅ **PASS**: Authentication will expose Next.js API routes and server actions following RESTful conventions with consistent request/response patterns.
 
-### III. Test-First (NON-NEGOTIABLE)
+#### III. Test-First (NON-NEGOTIABLE)
 ⚠️ **NEEDS CLARIFICATION**: Testing framework not yet determined. Must establish TDD workflow with unit tests for business logic, integration tests for API routes, and E2E tests for user flows.
 
-### IV. Integration Testing
+#### IV. Integration Testing
 ⚠️ **NEEDS CLARIFICATION**: Integration tests required for authentication flows, database interactions, and API route contracts. Framework selection needed.
 
-### V. Observability & Simplicity
+#### V. Observability & Simplicity
 ✅ **PASS**: Structured logging will be implemented for all authentication operations. Start simple with auth.js and drizzle-orm, avoid premature optimization.
 
-### Testing Gates
+#### Testing Gates
 ⚠️ **NEEDS CLARIFICATION**: Test framework and coverage thresholds must be established. All tests must pass before merge per constitution.
 
-### Security Requirements
+#### Security Requirements
 ✅ **PASS**: Authentication required for protected routes, input validation on all user inputs, secure password hashing, secrets via environment variables.
+
+### Post-Design Assessment
+
+#### I. Component-First
+✅ **PASS**: Design includes reusable components (`signin-form.tsx`, `signup-form.tsx`, `protected-route.tsx`) that are self-contained and independently testable. Components expose well-defined interfaces and can be composed into larger features.
+
+#### II. API/Route Interface
+✅ **PASS**: API contracts defined in `contracts/` directory with OpenAPI specification. Next.js API routes follow RESTful conventions with consistent request/response patterns. Error handling standardized across all endpoints.
+
+#### III. Test-First (NON-NEGOTIABLE)
+⚠️ **PENDING**: Testing framework selection documented in `research.md` as remaining research item. TDD workflow must be established during implementation phase. Test structure defined (`tests/contract/`, `tests/integration/`, `tests/unit/`) but framework selection needed.
+
+#### IV. Integration Testing
+⚠️ **PENDING**: Integration test requirements identified (authentication flows, database interactions, API route contracts) but framework selection pending. Test structure defined in project structure.
+
+#### V. Observability & Simplicity
+✅ **PASS**: Design follows YAGNI principles - using auth.js and drizzle-orm without premature optimization. Structured logging requirements documented. Simple, explicit implementation approach.
+
+#### Testing Gates
+⚠️ **PENDING**: Test framework selection is the remaining blocker. Once framework is selected, coverage thresholds and test requirements will be established. All tests must pass before merge per constitution.
+
+#### Security Requirements
+✅ **PASS**: Design includes authentication for protected routes, input validation, secure password hashing via auth.js, and environment variable management. Generic error messages prevent information disclosure. CSRF protection via auth.js.
+
+**Gate Status**: ⚠️ **CONDITIONAL PASS** - Testing framework selection is the only remaining clarification needed. All other gates pass. Implementation can proceed with testing framework selection as first task.
 
 ## Project Structure
 
