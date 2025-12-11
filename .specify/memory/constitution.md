@@ -49,6 +49,8 @@ Complexity must be justified with clear rationale; Prefer explicit over implicit
 ## Development Workflow
 
 ### Code Review Requirements
+New features will be developed on a new git branch using a branch nameing convention of 
+prefix/description, with feature, fix, docs, and chore as prefixes, and kebab case for description.
 All PRs must verify constitution compliance before merge;
 At least one approval required; Tests must pass; Linting and formatting checks must pass;
 Complexity violations must be documented in plan.md Complexity Tracking section.
