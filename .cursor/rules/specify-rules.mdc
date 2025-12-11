@@ -1,0 +1,30 @@
+# table-read Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2025-12-10
+
+## Active Technologies
+
+- TypeScript 5.6.3 + Next.js 15.1.0, React 18.3.1, auth.js (latest compatible), drizzle-orm (latest compatible), @auth/drizzle-adapter (latest compatible) (001-user-authentication)
+
+## Project Structure
+
+```text
+backend/
+frontend/
+tests/
+```
+
+## Commands
+
+npm test && npm run lint
+
+## Code Style
+
+TypeScript 5.6.3: Follow standard conventions
+
+## Recent Changes
+
+- 001-user-authentication: Added TypeScript 5.6.3 + Next.js 15.1.0, React 18.3.1, auth.js (latest compatible), drizzle-orm (latest compatible), @auth/drizzle-adapter (latest compatible)
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->
