@@ -1,50 +1,96 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+Version change: (none) → 1.0.0
+Modified principles: (none - initial fill-out)
+Added sections: Development Workflow, Quality Standards
+Removed sections: (none)
+Templates requiring updates:
+  ✅ .specify/templates/plan-template.md (Constitution Check section exists)
+  ✅ .specify/templates/spec-template.md (structure compatible)
+  ✅ .specify/templates/tasks-template.md (structure compatible)
+  ✅ .cursor/commands/*.md (no agent-specific references found)
+Follow-up TODOs: (none)
+-->
+
+# Table Read Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Component-First
+Every feature starts as a standalone, reusable component or module;
+Components must be self-contained, independently testable, and documented;
+Clear purpose required - no organizational-only components;
+Components expose well-defined interfaces and can be composed into larger features.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. API/Route Interface
+Every feature exposes functionality via well-defined API routes or Next.js routes;
+RESTful conventions: clear HTTP methods, status codes, error handling;
+Support JSON for machine consumption and human-readable formats for debugging;
+Server actions and API routes must have consistent request/response patterns.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Test-First (NON-NEGOTIABLE)
+TDD mandatory: Tests written → User approved → Tests fail → Then implement;
+Red-Green-Refactor cycle strictly enforced;
+Unit tests for business logic, integration tests for API routes, E2E tests for user flows;
+No production code without corresponding tests.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Integration Testing
+Focus areas requiring integration tests: New API route contract tests, Contract changes,
+Inter-service communication, Database interactions, Authentication flows, Shared schemas;
+Integration tests verify end-to-end behavior across component boundaries;
+Contract tests ensure API stability and backward compatibility.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Observability & Simplicity
+Structured logging required for all operations; Log levels (DEBUG, INFO, WARN, ERROR)
+must be used appropriately; Error tracking and monitoring for production issues;
+Start simple, YAGNI principles - avoid premature optimization;
+Complexity must be justified with clear rationale; Prefer explicit over implicit code.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Development Workflow
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### Code Review Requirements
+All PRs must verify constitution compliance before merge;
+At least one approval required; Tests must pass; Linting and formatting checks must pass;
+Complexity violations must be documented in plan.md Complexity Tracking section.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Testing Gates
+Unit tests required for all business logic; Integration tests required for API routes;
+E2E tests required for critical user flows; Test coverage thresholds enforced;
+All tests must pass before merge; Tests must be written before implementation (TDD);
+UI rendering tests are not necessary - focus testing efforts on business logic only.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### Deployment Process
+All features must be tested in staging before production;
+Database migrations must be backward compatible or include rollback plan;
+Breaking API changes require versioning strategy; Feature flags for gradual rollouts.
+
+## Quality Standards
+
+### Code Quality
+Strict typing enabled; Linting and formatting configured and enforced;
+No untyped or loosely-typed code without explicit justification; Consistent error handling patterns;
+Documentation for public APIs and complex logic.
+
+### Performance Standards
+Page load times under 2 seconds for initial render;
+API response times under 200ms for p95;
+Database queries optimized with proper indexing;
+Image optimization and code splitting required.
+
+### Security Requirements
+Authentication required for protected routes; Input validation on all user inputs;
+SQL injection prevention via parameterized queries; XSS prevention via proper escaping;
+CSRF protection for state-changing operations; Secrets managed via environment variables.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other development practices and guidelines.
+Amendments require: documentation of rationale, team approval, migration plan for
+existing code, version bump according to semantic versioning rules.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+All PRs and code reviews must verify compliance with these principles.
+Complexity must be justified in plan.md Complexity Tracking section.
+Use `.specify/memory/agent-file-template.md` (when generated) for runtime development
+guidance and technology-specific patterns.
+
+**Version**: 1.0.0 | **Ratified**: 2025-12-09 | **Last Amended**: 2025-12-09
