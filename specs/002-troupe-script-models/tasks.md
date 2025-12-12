@@ -17,11 +17,11 @@
 
 **Purpose**: Project initialization and testing framework configuration
 
-- [ ] T001 Install Jest testing dependencies in package.json (jest, @types/jest, ts-jest, @testing-library/react, @testing-library/jest-dom, @testing-library/node, jest-environment-node)
-- [ ] T002 [P] Create Jest configuration file jest.config.ts at repository root
-- [ ] T003 [P] Create tests/setup.ts for Jest setup with @testing-library/jest-dom import
-- [ ] T004 [P] Update package.json scripts section with test, test:watch, and test:coverage commands
-- [ ] T005 [P] Create tests directory structure (tests/contract/, tests/integration/, tests/unit/troupes/, tests/unit/scripts/, tests/e2e/)
+- [x] T001 Install Jest testing dependencies in package.json (jest, @types/jest, ts-jest, @testing-library/react, @testing-library/jest-dom, @testing-library/node, jest-environment-node)
+- [x] T002 [P] Create Jest configuration file jest.config.ts at repository root
+- [x] T003 [P] Create tests/setup.ts for Jest setup with @testing-library/jest-dom import
+- [x] T004 [P] Update package.json scripts section with test, test:watch, and test:coverage commands
+- [x] T005 [P] Create tests directory structure (tests/contract/, tests/integration/, tests/unit/troupes/, tests/unit/scripts/, tests/e2e/)
 
 ---
 
@@ -31,12 +31,12 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 Extend database schema in src/lib/db/schema.ts with troupes table (id, directorId, createdAt, updatedAt) with restrict on directorId deletion (prevent director deletion if troupe exists)
-- [ ] T007 [P] Extend database schema in src/lib/db/schema.ts with troupeMemberships table (id, userId, troupeId, createdAt, updatedAt) with indexes
-- [ ] T008 [P] Extend database schema in src/lib/db/schema.ts with scripts table (id, title, userId, troupeId, createdAt, updatedAt) with indexes and cascade delete on troupeId (troupe-owned scripts deleted when troupe deleted)
-- [ ] T009 Generate database migration using yarn db:gen command
-- [ ] T010 Review generated migration SQL in drizzle/ directory
-- [ ] T011 Apply database migration using yarn db:push or yarn db:migrate
+- [x] T006 Extend database schema in src/lib/db/schema.ts with troupes table (id, directorId, createdAt, updatedAt) with restrict on directorId deletion (prevent director deletion if troupe exists)
+- [x] T007 [P] Extend database schema in src/lib/db/schema.ts with troupeMemberships table (id, userId, troupeId, createdAt, updatedAt) with indexes
+- [x] T008 [P] Extend database schema in src/lib/db/schema.ts with scripts table (id, title, userId, troupeId, createdAt, updatedAt) with indexes and cascade delete on troupeId (troupe-owned scripts deleted when troupe deleted)
+- [x] T009 Generate database migration using yarn db:gen command
+- [x] T010 Review generated migration SQL in drizzle/ directory
+- [ ] T011 Apply database migration using yarn db:push or yarn db:migrate (SKIPPED - user will apply manually)
 
 **Checkpoint**: Foundation ready - database schema extended, migration applied. User story implementation can now begin.
 
@@ -52,30 +52,30 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T012 [P] [US1] Create unit test for troupe permissions in tests/unit/troupes/permissions.test.ts (isDirector, canManageTroupe functions)
-- [ ] T013 [P] [US1] Create unit test for troupe service in tests/unit/troupes/service.test.ts (createTroupe, approveMember, removeMember, deleteTroupe functions)
-- [ ] T014 [P] [US1] Create integration test for troupe CRUD operations in tests/integration/troupes.test.ts (create, list, get, delete troupe)
-- [ ] T015 [P] [US1] Create integration test for membership management in tests/integration/membership.test.ts (approve member, remove member, director-only enforcement)
-- [ ] T016 [P] [US1] Create contract test for GET /api/troupes in tests/contract/api/troupes.test.ts
-- [ ] T017 [P] [US1] Create contract test for POST /api/troupes in tests/contract/api/troupes.test.ts
-- [ ] T018 [P] [US1] Create contract test for GET /api/troupes/[id] in tests/contract/api/troupes.test.ts
-- [ ] T019 [P] [US1] Create contract test for DELETE /api/troupes/[id] in tests/contract/api/troupes.test.ts
-- [ ] T020 [P] [US1] Create contract test for POST /api/troupes/[id]/members in tests/contract/api/troupes.test.ts
-- [ ] T021 [P] [US1] Create contract test for DELETE /api/troupes/[id]/members/[userId] in tests/contract/api/troupes.test.ts
+- [x] T012 [P] [US1] Create unit test for troupe permissions in tests/unit/troupes/permissions.test.ts (isDirector, canManageTroupe functions)
+- [x] T013 [P] [US1] Create unit test for troupe service in tests/unit/troupes/service.test.ts (createTroupe, approveMember, removeMember, deleteTroupe functions)
+- [x] T014 [P] [US1] Create integration test for troupe CRUD operations in tests/integration/troupes.test.ts (create, list, get, delete troupe)
+- [x] T015 [P] [US1] Create integration test for membership management in tests/integration/membership.test.ts (approve member, remove member, director-only enforcement)
+- [x] T016 [P] [US1] Create contract test for GET /api/troupes in tests/contract/api/troupes.test.ts
+- [x] T017 [P] [US1] Create contract test for POST /api/troupes in tests/contract/api/troupes.test.ts
+- [x] T018 [P] [US1] Create contract test for GET /api/troupes/[id] in tests/contract/api/troupes.test.ts
+- [x] T019 [P] [US1] Create contract test for DELETE /api/troupes/[id] in tests/contract/api/troupes.test.ts
+- [x] T020 [P] [US1] Create contract test for POST /api/troupes/[id]/members in tests/contract/api/troupes.test.ts
+- [x] T021 [P] [US1] Create contract test for DELETE /api/troupes/[id]/members/[userId] in tests/contract/api/troupes.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T022 [P] [US1] Create troupe validation schema in src/lib/troupes/validation.ts (approveMemberSchema with Zod)
-- [ ] T023 [P] [US1] Create troupe permissions utility in src/lib/troupes/permissions.ts (isDirector, canManageTroupe functions)
-- [ ] T024 [US1] Create troupe service in src/lib/troupes/service.ts (createTroupe, approveMember, removeMember, deleteTroupe functions)
-- [ ] T025 [US1] Create GET /api/troupes route in src/app/api/troupes/route.ts (list user's troupes with member counts)
-- [ ] T026 [US1] Create POST /api/troupes route in src/app/api/troupes/route.ts (create troupe, user becomes director and first member)
-- [ ] T027 [US1] Create GET /api/troupes/[id] route in src/app/api/troupes/[id]/route.ts (get troupe details with members list)
-- [ ] T028 [US1] Create DELETE /api/troupes/[id] route in src/app/api/troupes/[id]/route.ts (delete troupe, director only, cascades to memberships and troupe-owned scripts)
-- [ ] T029 [US1] Create POST /api/troupes/[id]/members route in src/app/api/troupes/[id]/members/route.ts (approve member, director only)
-- [ ] T030 [US1] Create DELETE /api/troupes/[id]/members/[userId] route in src/app/api/troupes/[id]/members/[userId]/route.ts (remove member, director only)
-- [ ] T031 [US1] Add error handling and logging for troupe operations in service and API routes
-- [ ] T032 [US1] Add authentication checks to all troupe API routes (use existing auth() from @/lib/auth)
+- [x] T022 [P] [US1] Create troupe validation schema in src/lib/troupes/validation.ts (approveMemberSchema with Zod)
+- [x] T023 [P] [US1] Create troupe permissions utility in src/lib/troupes/permissions.ts (isDirector, canManageTroupe functions)
+- [x] T024 [US1] Create troupe service in src/lib/troupes/service.ts (createTroupe, approveMember, removeMember, deleteTroupe functions)
+- [x] T025 [US1] Create GET /api/troupes route in src/app/api/troupes/route.ts (list user's troupes with member counts)
+- [x] T026 [US1] Create POST /api/troupes route in src/app/api/troupes/route.ts (create troupe, user becomes director and first member)
+- [x] T027 [US1] Create GET /api/troupes/[id] route in src/app/api/troupes/[id]/route.ts (get troupe details with members list)
+- [x] T028 [US1] Create DELETE /api/troupes/[id] route in src/app/api/troupes/[id]/route.ts (delete troupe, director only, cascades to memberships and troupe-owned scripts)
+- [x] T029 [US1] Create POST /api/troupes/[id]/members route in src/app/api/troupes/[id]/members/route.ts (approve member, director only)
+- [x] T030 [US1] Create DELETE /api/troupes/[id]/members/[userId] route in src/app/api/troupes/[id]/members/[userId]/route.ts (remove member, director only)
+- [x] T031 [US1] Add error handling and logging for troupe operations in service and API routes
+- [x] T032 [US1] Add authentication checks to all troupe API routes (use existing auth() from @/lib/auth)
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently. Users can create troupes, directors can manage memberships, and all director-only permissions are enforced.
 

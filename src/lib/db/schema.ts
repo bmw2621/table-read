@@ -74,3 +74,63 @@ export const verificationTokens = pgTable("verification_token", {
   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
 });
 
+export const troupes = pgTable(
+  "troupe",
+  {
+    id: text("id").primaryKey().$defaultFn(() => createId()),
+    directorId: text("directorId")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
+  },
+  (table) => ({
+    directorIdIdx: index("troupe_directorId_idx").on(table.directorId),
+  })
+);
+
+export const troupeMemberships = pgTable(
+  "troupeMembership",
+  {
+    id: text("id").primaryKey().$defaultFn(() => createId()),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    troupeId: text("troupeId")
+      .notNull()
+      .references(() => troupes.id, { onDelete: "cascade" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
+  },
+  (table) => ({
+    userIdIdx: index("troupeMembership_userId_idx").on(table.userId),
+    troupeIdIdx: index("troupeMembership_troupeId_idx").on(table.troupeId),
+    userTroupeUnique: uniqueIndex("troupeMembership_userId_troupeId_idx").on(
+      table.userId,
+      table.troupeId
+    ),
+  })
+);
+
+export const scripts = pgTable(
+  "script",
+  {
+    id: text("id").primaryKey().$defaultFn(() => createId()),
+    title: text("title").notNull(),
+    // Polymorphic ownership: script belongs to EITHER user OR troupe (mutually exclusive)
+    // Cascade behavior: Only deletes script if it belongs to the deleted entity
+    // - User-owned (userId set, troupeId null): Deleted when user deleted
+    // - Troupe-owned (userId null, troupeId set): Deleted when troupe deleted, NOT when user deleted
+    userId: text("userId")
+      .references(() => users.id, { onDelete: "cascade" }),
+    troupeId: text("troupeId")
+      .references(() => troupes.id, { onDelete: "cascade" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
+  },
+  (table) => ({
+    userIdIdx: index("script_userId_idx").on(table.userId),
+    troupeIdIdx: index("script_troupeId_idx").on(table.troupeId),
+  })
+);
+
