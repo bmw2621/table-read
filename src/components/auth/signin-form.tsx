@@ -25,12 +25,6 @@ export function SigninForm() {
     resolver: zodResolver(signinSchema),
   });
 
-  useEffect(() => {
-    if (registered === "true") {
-      // Show success message for newly registered users
-      // This will be cleared when form is submitted
-    }
-  }, [registered]);
 
   const onSubmit = async (data: SigninFormData) => {
     setIsLoading(true);
@@ -52,7 +46,7 @@ export function SigninForm() {
       if (result?.ok) {
         // Redirect to dashboard or callback URL
         const callbackUrl = searchParams.get("callbackUrl");
-        const redirectUrl = callbackUrl || "/dashboard";
+        const redirectUrl = callbackUrl || "/app";
         router.push(redirectUrl);
         router.refresh();
       }

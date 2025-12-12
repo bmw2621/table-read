@@ -1,7 +1,10 @@
 import { SigninForm } from "@/components/auth/signin-form";
 import Link from "next/link";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-export default function SigninPage() {
+export default async function SigninPage() {
+  if (await auth()){return redirect("/app")}
   return (
     <div className="space-y-6">
       <div>
