@@ -37,13 +37,25 @@ describe("Script API Contract Tests", () => {
 
   describe("GET /api/scripts", () => {
     it("should return 200 with scripts list when authenticated", async () => {
-      // Mock db.select chain
-      (db.select as jest.Mock).mockReturnValue({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            limit: jest.fn().mockResolvedValue([]),
-          }),
-        }),
+      // Mock db.select chain - first call for troupe memberships, second for scripts
+      let callCount = 0;
+      (db.select as jest.Mock).mockImplementation(() => {
+        callCount++;
+        if (callCount === 1) {
+          // First call: troupe memberships query
+          return {
+            from: jest.fn().mockReturnValue({
+              where: jest.fn().mockResolvedValue([]), // Empty array - no troupes
+            }),
+          };
+        } else {
+          // Second call: scripts query
+          return {
+            from: jest.fn().mockReturnValue({
+              where: jest.fn().mockResolvedValue([]), // Empty array - no scripts
+            }),
+          };
+        }
       });
 
       const request = new NextRequest("http://localhost/api/scripts");

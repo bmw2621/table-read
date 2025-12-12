@@ -1,5 +1,5 @@
 import { InferSelectModel } from "drizzle-orm";
-import { troupes, troupeMemberships, users } from "@/lib/db/schema";
+import { troupes, troupeMemberships, users, scripts } from "@/lib/db/schema";
 
 /**
  * Base database entity types
@@ -7,6 +7,7 @@ import { troupes, troupeMemberships, users } from "@/lib/db/schema";
 export type Troupe = InferSelectModel<typeof troupes>;
 export type TroupeMembership = InferSelectModel<typeof troupeMemberships>;
 export type User = InferSelectModel<typeof users>;
+export type Script = InferSelectModel<typeof scripts>;
 
 /**
  * Extended types for API responses
@@ -22,6 +23,15 @@ export type TroupeWithMembers = Troupe & {
 };
 
 export type UserPublic = Pick<User, "id" | "username" | "name" | "email" | "createdAt">;
+
+export type ScriptWithOwnerType = Script & {
+  ownerType: "user" | "troupe";
+};
+
+export type ScriptWithAccess = Script & {
+  ownerType: "user" | "troupe";
+  canEdit: boolean;
+};
 
 /**
  * Base API response structure
@@ -92,6 +102,56 @@ export type RemoveMemberResponse = ApiResponse<{
 }>;
 
 /**
+ * Script API Response Types
+ */
+
+/**
+ * GET /api/scripts
+ * Returns a list of scripts accessible to the user
+ */
+export type GetScriptsResponse = ApiResponse<{
+  scripts: ScriptWithOwnerType[];
+  pagination: {
+    total: number;
+    limit: number;
+    offset: number;
+    hasMore: boolean;
+  };
+}>;
+
+/**
+ * POST /api/scripts
+ * Creates a new script
+ */
+export type CreateScriptResponse = ApiResponse<{
+  script: Script;
+}>;
+
+/**
+ * GET /api/scripts/[id]
+ * Returns a single script with access information
+ */
+export type GetScriptResponse = ApiResponse<{
+  script: ScriptWithAccess;
+}>;
+
+/**
+ * PUT /api/scripts/[id]
+ * Updates a script
+ */
+export type UpdateScriptResponse = ApiResponse<{
+  script: Script;
+}>;
+
+/**
+ * DELETE /api/scripts/[id]
+ * Deletes a script
+ */
+export type DeleteScriptResponse = ApiResponse<{
+  message: string;
+}>;
+
+/**
  * Auth API Response Types
  */
 
@@ -113,5 +173,10 @@ export type ApiSuccessResponse =
   | DeleteTroupeResponse
   | ApproveMemberResponse
   | RemoveMemberResponse
+  | GetScriptsResponse
+  | CreateScriptResponse
+  | GetScriptResponse
+  | UpdateScriptResponse
+  | DeleteScriptResponse
   | SignupResponse;
 
