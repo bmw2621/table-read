@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { updateScriptSchema } from "@/lib/scripts/validation";
+import { canAccessScript } from "@/lib/scripts/access";
+import { isDirector } from "@/lib/troupes/permissions";
 import { db } from "@/lib/db";
 import { scripts, troupeMemberships } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
@@ -34,24 +36,8 @@ export async function GET(
     );
   }
 
-  // Basic access check: user owns it OR script belongs to a troupe user is member of
-  // Full access control will be in US3
-  let hasAccess = false;
-  if (script.userId === userId) {
-    hasAccess = true;
-  } else if (script.troupeId) {
-    const membership = await db
-      .select()
-      .from(troupeMemberships)
-      .where(
-        and(
-          eq(troupeMemberships.userId, userId),
-          eq(troupeMemberships.troupeId, script.troupeId)
-        )
-      )
-      .limit(1);
-    hasAccess = membership.length > 0;
-  }
+  // Check access using access control utility
+  const hasAccess = await canAccessScript(userId, script);
 
   if (!hasAccess) {
     return NextResponse.json(
@@ -69,7 +55,7 @@ export async function GET(
     script: {
       ...script,
       ownerType: script.userId ? "user" : "troupe",
-      canEdit: script.userId === userId, // For US2: only owner can edit (troupe edit logic in US3)
+      canEdit: script.userId === userId || (script.troupeId !== null && hasAccess), // Owner or troupe member can edit
     },
     status: 200,
     ok: true,
@@ -121,12 +107,13 @@ export async function PUT(
       );
     }
 
-    // Check ownership (for US2: only owner can update)
-    if (script.userId !== userId) {
+    // Check access: user owns it OR is a member of troupe that owns it
+    const hasAccess = await canAccessScript(userId, script);
+    if (!hasAccess) {
       return NextResponse.json(
         {
           error: "Forbidden",
-          message: "Only the owner can update this script",
+          message: "You do not have access to this script",
           status: 403,
           ok: false,
         },
@@ -193,12 +180,42 @@ export async function DELETE(
       );
     }
 
-    // Check ownership (for US2: only owner can delete)
-    if (script.userId !== userId) {
+    // Check deletion permission:
+    // - User-owned scripts: only the owner can delete
+    // - Troupe-owned scripts: only the troupe director can delete
+    if (script.userId) {
+      // User-owned script: check if user is the owner
+      if (script.userId !== userId) {
+        return NextResponse.json(
+          {
+            error: "Forbidden",
+            message: "Only the owner can delete this script",
+            status: 403,
+            ok: false,
+          },
+          { status: 403 }
+        );
+      }
+    } else if (script.troupeId) {
+      // Troupe-owned script: check if user is the director
+      const isUserDirector = await isDirector(userId, script.troupeId);
+      if (!isUserDirector) {
+        return NextResponse.json(
+          {
+            error: "Forbidden",
+            message: "Only the troupe director can delete this script",
+            status: 403,
+            ok: false,
+          },
+          { status: 403 }
+        );
+      }
+    } else {
+      // Script has no owner (edge case)
       return NextResponse.json(
         {
           error: "Forbidden",
-          message: "Only the owner can delete this script",
+          message: "You do not have access to this script",
           status: 403,
           ok: false,
         },
