@@ -1,0 +1,600 @@
+openapi: 3.0.3
+info:
+  title: Troupe and Script Management API
+  description: API contracts for troupe and script data models with ownership relationships
+  version: 1.0.0
+  contact:
+    name: Table Read Team
+
+servers:
+  - url: /api
+    description: API base path
+
+paths:
+  /troupes:
+    get:
+      summary: List user's troupes
+      operationId: listTroupes
+      tags:
+        - Troupes
+      security:
+        - sessionCookie: []
+      responses:
+        '200':
+          description: List of troupes user belongs to
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TroupeListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      summary: Create a new troupe
+      operationId: createTroupe
+      tags:
+        - Troupes
+      security:
+        - sessionCookie: []
+      responses:
+        '201':
+          description: Troupe created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TroupeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /troupes/{id}:
+    get:
+      summary: Get troupe details
+      operationId: getTroupe
+      tags:
+        - Troupes
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Troupe details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TroupeDetailResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      summary: Delete a troupe
+      operationId: deleteTroupe
+      tags:
+        - Troupes
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Troupe deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /troupes/{id}/members:
+    post:
+      summary: Approve a user to join troupe
+      operationId: approveMember
+      tags:
+        - Troupes
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+              properties:
+                userId:
+                  type: string
+                  description: User ID to approve
+      responses:
+        '201':
+          description: Member approved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembershipResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /troupes/{id}/members/{userId}:
+    delete:
+      summary: Remove a member from troupe
+      operationId: removeMember
+      tags:
+        - Troupes
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Member removed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /scripts:
+    get:
+      summary: List accessible scripts
+      operationId: listScripts
+      tags:
+        - Scripts
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: ownerType
+          in: query
+          schema:
+            type: string
+            enum: [user, troupe]
+        - name: troupeId
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of accessible scripts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      summary: Create a new script
+      operationId: createScript
+      tags:
+        - Scripts
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                  description: Script title
+                  example: "My Script"
+                troupeId:
+                  type: string
+                  description: Optional troupe ID for troupe ownership
+      responses:
+        '201':
+          description: Script created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /scripts/{id}:
+    get:
+      summary: Get script details
+      operationId: getScript
+      tags:
+        - Scripts
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Script details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptDetailResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      summary: Update a script
+      operationId: updateScript
+      tags:
+        - Scripts
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                  description: Script title
+      responses:
+        '200':
+          description: Script updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      summary: Delete a script
+      operationId: deleteScript
+      tags:
+        - Scripts
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Script deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  schemas:
+    Troupe:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique troupe identifier
+          example: "clx123abc456"
+        directorId:
+          type: string
+          description: User ID of the troupe director
+          example: "clx789def012"
+        createdAt:
+          type: string
+          format: date-time
+          description: Troupe creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+
+    TroupeListResponse:
+      type: object
+      properties:
+        troupes:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Troupe'
+              - type: object
+                properties:
+                  isDirector:
+                    type: boolean
+                  memberCount:
+                    type: integer
+        status:
+          type: integer
+          example: 200
+        ok:
+          type: boolean
+          example: true
+
+    TroupeResponse:
+      type: object
+      properties:
+        troupe:
+          $ref: '#/components/schemas/Troupe'
+        status:
+          type: integer
+          example: 201
+        ok:
+          type: boolean
+          example: true
+
+    TroupeDetailResponse:
+      type: object
+      properties:
+        troupe:
+          allOf:
+            - $ref: '#/components/schemas/Troupe'
+            - type: object
+              properties:
+                isDirector:
+                  type: boolean
+                members:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Membership'
+        status:
+          type: integer
+          example: 200
+        ok:
+          type: boolean
+          example: true
+
+    Membership:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        joinedAt:
+          type: string
+          format: date-time
+
+    MembershipResponse:
+      type: object
+      properties:
+        membership:
+          $ref: '#/components/schemas/Membership'
+        status:
+          type: integer
+          example: 201
+        ok:
+          type: boolean
+          example: true
+
+    Script:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique script identifier
+          example: "clx456ghi789"
+        title:
+          type: string
+          description: Script title
+          example: "My Script"
+        userId:
+          type: string
+          nullable: true
+          description: User owner (null if troupe-owned)
+        troupeId:
+          type: string
+          nullable: true
+          description: Troupe owner (null if user-owned)
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ScriptListResponse:
+      type: object
+      properties:
+        scripts:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Script'
+              - type: object
+                properties:
+                  ownerType:
+                    type: string
+                    enum: [user, troupe]
+        pagination:
+          type: object
+          properties:
+            total:
+              type: integer
+            limit:
+              type: integer
+            offset:
+              type: integer
+            hasMore:
+              type: boolean
+        status:
+          type: integer
+          example: 200
+        ok:
+          type: boolean
+          example: true
+
+    ScriptResponse:
+      type: object
+      properties:
+        script:
+          $ref: '#/components/schemas/Script'
+        status:
+          type: integer
+          example: 201
+        ok:
+          type: boolean
+          example: true
+
+    ScriptDetailResponse:
+      type: object
+      properties:
+        script:
+          allOf:
+            - $ref: '#/components/schemas/Script'
+            - type: object
+              properties:
+                ownerType:
+                  type: string
+                  enum: [user, troupe]
+                canEdit:
+                  type: boolean
+        status:
+          type: integer
+          example: 200
+        ok:
+          type: boolean
+          example: true
+
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: integer
+          example: 200
+        ok:
+          type: boolean
+          example: true
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - status
+        - ok
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: User-friendly error message
+        status:
+          type: integer
+          description: HTTP status code
+        ok:
+          type: boolean
+          example: false
+
+  responses:
+    BadRequest:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Permission denied
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: next-auth.session-token
+      description: Session cookie for authenticated requests
+
+security:
+  - sessionCookie: []
+
