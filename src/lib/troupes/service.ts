@@ -7,14 +7,16 @@ import { canManageTroupe, isDirector } from "./permissions";
  * Create a new troupe with the specified user as director
  * The director is automatically added as the first member
  * @param directorId - The user ID who will be the director
+ * @param name - The name of the troupe
  * @returns The created troupe
  */
-export async function createTroupe(directorId: string) {
+export async function createTroupe(directorId: string, name: string) {
   // Create troupe
   const [troupe] = await db
     .insert(troupes)
     .values({
       directorId,
+      name
     })
     .returning();
 

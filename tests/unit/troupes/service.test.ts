@@ -28,6 +28,7 @@ import { canManageTroupe } from "@/lib/troupes/permissions";
 describe("Troupe Service", () => {
   const mockDirectorId = "director-123";
   const mockTroupeId = "troupe-456";
+  const mockTroupeName = "Troupe Name";
   const mockUserId = "user-789";
   const mockMembershipId = "membership-101";
 
@@ -52,6 +53,7 @@ describe("Troupe Service", () => {
       const mockTroupe = {
         id: mockTroupeId,
         directorId: mockDirectorId,
+        name: mockTroupeName,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -70,7 +72,7 @@ describe("Troupe Service", () => {
         .mockReturnValueOnce(mockInsertTroupe(troupes))
         .mockReturnValueOnce(mockInsertMembership(troupeMemberships));
 
-      const result = await createTroupe(mockDirectorId);
+      const result = await createTroupe(mockDirectorId, mockTroupeName);
 
       expect(result).toEqual(mockTroupe);
       expect(db.insert).toHaveBeenCalledTimes(2);
