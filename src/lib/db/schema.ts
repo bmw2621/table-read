@@ -14,9 +14,9 @@ export const users = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => ({
-    usernameIdx: uniqueIndex("username_idx").on(table.username),
-  })
+  (table) => [
+   uniqueIndex("username_idx").on(table.username),
+  ]
 );
 
 export const sessions = pgTable(
@@ -31,11 +31,11 @@ export const sessions = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => ({
-    userIdIdx: index("session_userId_idx").on(table.userId),
-    tokenIdx: uniqueIndex("session_token_idx").on(table.token),
-    expiresAtIdx: index("session_expiresAt_idx").on(table.expiresAt),
-  })
+  (table) => ([
+    index("session_userId_idx").on(table.userId),
+    uniqueIndex("session_token_idx").on(table.token),
+    index("session_expiresAt_idx").on(table.expiresAt),
+  ])
 );
 
 export const accounts = pgTable(
@@ -58,13 +58,13 @@ export const accounts = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => ({
-    userIdIdx: index("account_userId_idx").on(table.userId),
-    providerAccountIdx: uniqueIndex("account_provider_providerAccountId_idx").on(
+  (table) => ([
+    index("account_userId_idx").on(table.userId),
+    uniqueIndex("account_provider_providerAccountId_idx").on(
       table.provider,
       table.providerAccountId
     ),
-  })
+  ])
 );
 
 export const verificationTokens = pgTable("verification_token", {
@@ -81,12 +81,13 @@ export const troupes = pgTable(
     directorId: text("directorId")
       .notNull()
       .references(() => users.id, { onDelete: "restrict" }),
+    name: text("name").notNull(),
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => ({
-    directorIdIdx: index("troupe_directorId_idx").on(table.directorId),
-  })
+  (table) => ([
+    index("troupe_directorId_idx").on(table.directorId),
+  ])
 );
 
 export const troupeMemberships = pgTable(
@@ -102,14 +103,14 @@ export const troupeMemberships = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => ({
-    userIdIdx: index("troupeMembership_userId_idx").on(table.userId),
-    troupeIdIdx: index("troupeMembership_troupeId_idx").on(table.troupeId),
-    userTroupeUnique: uniqueIndex("troupeMembership_userId_troupeId_idx").on(
+  (table) => ([
+    index("troupeMembership_userId_idx").on(table.userId),
+    index("troupeMembership_troupeId_idx").on(table.troupeId),
+    uniqueIndex("troupeMembership_userId_troupeId_idx").on(
       table.userId,
       table.troupeId
     ),
-  })
+  ])
 );
 
 export const scripts = pgTable(
@@ -128,9 +129,9 @@ export const scripts = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => ({
-    userIdIdx: index("script_userId_idx").on(table.userId),
-    troupeIdIdx: index("script_troupeId_idx").on(table.troupeId),
-  })
+  (table) => ([
+    index("script_userId_idx").on(table.userId),
+    index("script_troupeId_idx").on(table.troupeId),
+  ])
 );
 
