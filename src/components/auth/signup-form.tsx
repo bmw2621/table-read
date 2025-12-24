@@ -6,7 +6,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { signupSchema as baseSignupSchema } from "@/lib/auth/validation";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/index";
 
 function getPasswordStrength(password: string): {
   strength: "weak" | "medium" | "strong" | "very-strong";
@@ -120,7 +120,7 @@ export function SignupForm() {
           type="text"
           id="username"
           className={cn(
-            "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500",
+            "mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500",
             errors.username && "border-red-300"
           )}
           disabled={isLoading}
@@ -142,7 +142,7 @@ export function SignupForm() {
           type="password"
           id="password"
           className={cn(
-            "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500",
+            "mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500",
             errors.password && "border-red-300"
           )}
           disabled={isLoading}
@@ -195,7 +195,7 @@ export function SignupForm() {
           type="password"
           id="confirmPassword"
           className={cn(
-            "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500",
+            "mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500",
             errors.confirmPassword && "border-red-300"
           )}
           disabled={isLoading}
@@ -216,7 +216,7 @@ export function SignupForm() {
           type="text"
           id="name"
           className={cn(
-            "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500",
+            "mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500",
             errors.name && "border-red-300"
           )}
           disabled={isLoading}
@@ -238,7 +238,7 @@ export function SignupForm() {
           type="email"
           id="email"
           className={cn(
-            "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500",
+            "mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500",
             errors.email && "border-red-300"
           )}
           disabled={isLoading}
@@ -251,7 +251,7 @@ export function SignupForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+        className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
       >
         {isLoading ? "Creating account..." : "Sign Up"}
       </button>
