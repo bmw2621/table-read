@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { createTroupe } from "@/lib/troupes/service";
 import { db } from "@/lib/db";
-import { troupes, troupeMemberships } from "@/lib/db/schema";
+import { troupeMemberships, troupes } from "@/lib/db/schema";
+import { createTroupe } from "@/lib/troupes/service";
 import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const session = await auth();
@@ -57,8 +57,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const body = await request.json();
+  const name = body.name;
+  if (!name) {
+    return NextResponse.json(
+      { error: "Name is required", status: 400, ok: false },
+      { status: 400 }
+    );
+  }
   try {
-    const troupe = await createTroupe(session.user.id);
+    const troupe = await createTroupe(session.user.id, name);
     return NextResponse.json(
       { troupe, status: 201, ok: true },
       { status: 201 }
@@ -76,4 +84,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

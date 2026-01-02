@@ -1,6 +1,6 @@
 "use client";
 
-import { ScriptWithOwnerType, Troupe } from "@/lib/typedefs";
+import { ScriptWithOwnerType } from "@/lib/typedefs";
 import { FC } from "react";
 
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAccount } from "@/lib/providers/AccountProvider";
 import { CreateScriptInput, UpdateScriptInput } from "@/lib/scripts/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -52,7 +53,7 @@ const ScriptForm: FC<Props> = ({ onSubmit, resolver, action, script }) => {
     resolver: zodResolver(resolver),
     defaultValues,
   });
-  const troupes: Troupe[] = [];
+  const { troupes } = useAccount();
   return (
     <form
       id="script-form"

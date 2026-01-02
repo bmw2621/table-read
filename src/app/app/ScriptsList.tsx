@@ -1,6 +1,7 @@
 "use client";
 
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { useAccount } from "@/lib/providers/AccountProvider";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { FC } from "react";
@@ -12,6 +13,7 @@ import ScriptActionsPopover from "./ScriptActionsPopover";
  */
 const ScriptsList: FC = () => {
   const { data: scripts } = useSuspenseQuery(scriptOptions);
+  const { troupes, isLoadingTroupes } = useAccount();
 
   return (
     <Table>
@@ -21,9 +23,14 @@ const ScriptsList: FC = () => {
             <TableCell>
               <Link href={`/scripts/${script.id}`}>{script.title}</Link>
             </TableCell>
-            <TableCell>
-              {script.ownerType === "user" ? "-" : script.troupeId}
-            </TableCell>
+            {!isLoadingTroupes && (
+              <TableCell>
+                {script.troupeId
+                  ? troupes?.find((troupe) => troupe.id === script.troupeId)
+                      ?.name
+                  : "-"}
+              </TableCell>
+            )}
             <TableCell align="right">
               <ScriptActionsPopover script={script} />
             </TableCell>
