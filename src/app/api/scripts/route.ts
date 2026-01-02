@@ -1,10 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { createScript } from "@/lib/scripts/service";
+import { createScript, getUserScripts } from "@/lib/scripts/service";
 import { createScriptSchema } from "@/lib/scripts/validation";
-import { db } from "@/lib/db";
-import { scripts, troupeMemberships } from "@/lib/db/schema";
-import { eq, or, and } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const session = await auth();
@@ -18,40 +15,7 @@ export async function GET(request: NextRequest) {
   const userId = session.user.id;
 
   // Get user's troupe IDs
-  const userTroupes = await db
-    .select({ troupeId: troupeMemberships.troupeId })
-    .from(troupeMemberships)
-    .where(eq(troupeMemberships.userId, userId));
-
-  const troupeIds = Array.isArray(userTroupes) 
-    ? userTroupes.map((ut) => ut.troupeId)
-    : [];
-
-  // Get scripts: user-owned OR troupe-owned (where user is member)
-  let userScripts;
-  if (troupeIds.length === 0) {
-    // Only user-owned scripts
-    userScripts = await db
-      .select()
-      .from(scripts)
-      .where(eq(scripts.userId, userId));
-  } else {
-    // User-owned OR troupe-owned scripts
-    const conditions = [eq(scripts.userId, userId)];
-    troupeIds.forEach((tid) => {
-      conditions.push(eq(scripts.troupeId, tid));
-    });
-    userScripts = await db
-      .select()
-      .from(scripts)
-      .where(or(...conditions));
-  }
-
-  // Format scripts with ownerType
-  const formattedScripts = userScripts.map((script) => ({
-    ...script,
-    ownerType: script.userId ? "user" : "troupe",
-  }));
+  const formattedScripts = await getUserScripts(userId);
 
   return NextResponse.json({
     scripts: formattedScripts,
@@ -103,7 +67,7 @@ export async function POST(request: NextRequest) {
     );
   } catch (error: any) {
     console.error("Error creating script:", error);
-    
+
     if (error.message.includes("member")) {
       return NextResponse.json(
         {

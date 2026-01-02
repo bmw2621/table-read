@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signinSchema, type SigninInput } from "@/lib/auth/validation";
 import { signIn } from "next-auth/react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/index";
 
 type SigninFormData = SigninInput;
 
@@ -84,7 +84,7 @@ export function SigninForm() {
           id="username"
           autoComplete="username"
           className={cn(
-            "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500",
+            "mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500",
             errors.username && "border-red-300"
           )}
           disabled={isLoading}
@@ -107,7 +107,7 @@ export function SigninForm() {
           id="password"
           autoComplete="current-password"
           className={cn(
-            "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500",
+            "mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500",
             errors.password && "border-red-300"
           )}
           disabled={isLoading}
@@ -120,7 +120,7 @@ export function SigninForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+        className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
       >
         {isLoading ? "Signing in..." : "Sign In"}
       </button>

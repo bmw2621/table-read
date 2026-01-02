@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="60mm"
+   height="60mm"
+   viewBox="0 0 60 60.000001"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   sodipodi:docname="logoMask.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.62240079"
+     inkscape:cx="396.04705"
+     inkscape:cy="561.53527"
+     inkscape:window-width="1896"
+     inkscape:window-height="1030"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs1">
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter23"
+       x="-0.083505794"
+       y="-0.073700007"
+       width="1.2071586"
+       height="1.1875571">
+      <feFlood
+         result="flood"
+         in="SourceGraphic"
+         flood-opacity="0.498039"
+         flood-color="rgb(0,0,0)"
+         id="feFlood22" />
+      <feGaussianBlur
+         result="blur"
+         in="SourceGraphic"
+         stdDeviation="1.300000"
+         id="feGaussianBlur22" />
+      <feOffset
+         result="offset"
+         in="blur"
+         dx="1.500000"
+         dy="1.700000"
+         id="feOffset22" />
+      <feComposite
+         result="comp1"
+         operator="in"
+         in="flood"
+         in2="offset"
+         id="feComposite22" />
+      <feComposite
+         result="comp2"
+         operator="over"
+         in="SourceGraphic"
+         in2="comp1"
+         id="feComposite23" />
+    </filter>
+  </defs>
+  <g
+     id="g2"
+     inkscape:label="Mask"
+     transform="matrix(2.5529176,0,0,2.5529176,-255.64587,-310.52254)">
+    <path
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke-width:0.264583"
+       d="m 104.90729,126.73542 -0.13229,5.22552 2.51354,4.96093 3.57188,2.31511 3.9026,-0.8599 2.51355,-5.15937 1.05833,-6.48229 -11.44323,0.33072"
+       id="path29-0"
+       inkscape:label="whitebg" />
+    <path
+       id="path24-2"
+       style="display:inline;fill:#631f23;fill-opacity:1;stroke-width:0.264583;filter:url(#filter23)"
+       d="m -69.8292,-7.33825 c -0.0328,0.002 -0.0599,0.008 -0.0806,0.0207 -0.24555,1.32716 -0.14728,6.7158 -0.14728,18.22938 0,11.51358 12.56534,24.08328 18.66191,24.08328 6.09657,0 18.66191,-12.5697 18.66191,-24.08328 0,-11.51358 0.0983,-16.90222 -0.14727,-18.22938 -0.0207,-0.0127 -0.0478,-0.0187 -0.0806,-0.0207 -0.0109,-5.5e-4 -0.0223,-5.7e-4 -0.0346,0 -0.99949,0.0463 -6.48616,3.78064 -18.3994,3.78064 -11.91324,0 -17.3999,-3.7343 -18.39939,-3.78064 -0.0123,-5.7e-4 -0.0237,-5.5e-4 -0.0346,0 z m 9.57564,12.52275 c 0.52899,-0.0114 1.06523,0.0535 1.58647,0.21859 3.82799,1.2125 5.05735,5.4463 3.53673,5.03948 -2.71452,-0.72624 1.66058,-0.55431 -7.83776,-1.36891 -0.49107,-0.0421 -2.09445,-0.53275 -1.98438,-1.46761 0.24714,-0.89657 2.40666,-2.37211 4.69894,-2.42155 z m 17.71675,0 c 2.29228,0.0494 4.4518,1.52498 4.69894,2.42155 0.11007,0.93486 -1.49331,1.42551 -1.98438,1.46761 -9.49834,0.8146 -5.12324,0.64267 -7.83776,1.36891 -1.52062,0.40682 -0.29126,-3.82698 3.53673,-5.03948 0.52124,-0.16509 1.05748,-0.22999 1.58647,-0.21859 z m -18.19062,14.54381 c 0.0615,-0.004 0.16312,0.0446 0.32039,0.17415 1.69576,1.39723 5.69263,2.29702 9.01185,2.29702 3.31922,0 7.3161,-0.89979 9.01186,-2.29702 0.62907,-0.51832 0.36721,0.26368 0.21187,0.46509 -1.47688,1.91494 -2.29134,7.1391 -9.22373,7.1391 -6.93239,0 -7.74684,-5.22416 -9.22372,-7.1391 -0.11651,-0.15106 -0.29298,-0.62853 -0.10852,-0.63924 z"
+       inkscape:label="Mask"
+       transform="matrix(0.4342411,0,0,0.4342411,133.88218,127.01175)" />
+  </g>
+</svg>

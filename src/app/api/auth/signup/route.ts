@@ -4,7 +4,7 @@ import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { signupSchema } from "@/lib/auth/validation";
-import { logger } from "@/lib/utils";
+import { logger } from "@/lib/utils/index";
 
 export async function POST(request: NextRequest) {
   try {
