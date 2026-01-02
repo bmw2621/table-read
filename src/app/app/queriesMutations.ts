@@ -1,3 +1,4 @@
+import { CreateScriptInput, UpdateScriptInput } from "@/lib/scripts/validation";
 import { ScriptWithOwnerType } from "@/lib/typedefs";
 import { getQueryClient } from "@/lib/utils/getQueryClient";
 import {
@@ -5,15 +6,6 @@ import {
   queryOptions,
   useMutation,
 } from "@tanstack/react-query";
-
-/**
- * Types
- */
-export type UpdateScriptFormData = {
-  id: string;
-  troupeId: string | undefined;
-  title: string;
-};
 
 /**
  * Query Client
@@ -54,9 +46,29 @@ export const useScriptDelete = (onSuccess: () => void) =>
 export const useScriptUpdate = (onSuccess: () => void) =>
   useMutation(
     mutationOptions({
-      mutationFn: async (data: UpdateScriptFormData) => {
+      mutationFn: async (data: UpdateScriptInput) => {
         const response = await fetch(`/api/scripts/${data.id}`, {
           method: "PUT",
+          body: JSON.stringify(data),
+        });
+        const responseData = await response.json();
+        console.log(responseData);
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: scriptOptions.queryKey,
+        });
+        onSuccess();
+      },
+    })
+  );
+
+export const useScriptCreate = (onSuccess: () => void) =>
+  useMutation(
+    mutationOptions({
+      mutationFn: async (data: CreateScriptInput) => {
+        const response = await fetch(`/api/scripts`, {
+          method: "POST",
           body: JSON.stringify(data),
         });
         const responseData = await response.json();

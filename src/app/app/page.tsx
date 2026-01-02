@@ -1,12 +1,12 @@
 import { auth } from "@/lib/auth";
+import { getUserScripts } from "@/lib/scripts/service";
 import { redirect } from "next/navigation";
 import ScriptsList from "./ScriptsList";
-import { getUserScripts } from "@/lib/scripts/service";
 
-import AddScriptButton from "./AddScriptButton";
 import { getQueryClient } from "@/lib/utils/getQueryClient";
-import { scriptOptions } from "./queriesMutations";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import AddScriptButton from "./AddScriptButton";
+import { scriptOptions } from "./queriesMutations";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -30,7 +30,9 @@ export default async function DashboardPage() {
                 <h2 className="text-lg font-semibold text-gray-900">Scripts</h2>
                 <AddScriptButton />
               </div>
-              <ScriptsList />
+              <div className="max-h-96 overflow-y-auto">
+                <ScriptsList />
+              </div>
             </div>
           </div>
         </div>

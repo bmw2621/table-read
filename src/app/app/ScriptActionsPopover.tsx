@@ -9,9 +9,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ScriptWithOwnerType } from "@/lib/typedefs";
-import { Icon } from "@iconify/react";
+import { Edit, EllipsisVertical, Trash2 } from "lucide-react";
 import { FC, useState } from "react";
-import z from "zod";
 
 /**
  * Types
@@ -19,16 +18,6 @@ import z from "zod";
 type Props = {
   script: ScriptWithOwnerType;
 };
-
-/**
- * Schemas
- */
-
-export const updateScriptSchema = z.object({
-  id: z.string().min(1, "ID is required"),
-  title: z.string().min(1, "Title is required"),
-  troupeId: z.string().optional(),
-});
 
 /**
  * Component
@@ -52,7 +41,7 @@ const ScriptActionsPopover: FC<Props> = ({ script }) => {
     <>
       <Popover>
         <PopoverTrigger>
-          <Icon icon="radix-icons:dots-vertical" />
+          <EllipsisVertical className="size-4!" />
         </PopoverTrigger>
         <PopoverContent>
           <div className="flex flex-col gap-2">
@@ -61,14 +50,16 @@ const ScriptActionsPopover: FC<Props> = ({ script }) => {
               className="hover:bg-transparent hover:text-black justify-start p-0 h-5"
               onClick={() => setIsEditDialogOpen(true)}
             >
-              <Icon className="text-primary" icon="lucide:edit" /> Edit
+              <Edit className="text-primary" />
+              Edit
             </Button>
             <Button
               variant="ghost"
               className="hover:bg-transparent hover:text-black justify-start p-0 h-5"
               onClick={() => setIsDeleteDialogOpen(true)}
             >
-              <Icon className="text-accent" icon="radix-icons:trash" /> Delete
+              <Trash2 className="text-accent" />
+              Delete
             </Button>
           </div>
         </PopoverContent>

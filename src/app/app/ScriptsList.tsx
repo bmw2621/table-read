@@ -1,11 +1,11 @@
 "use client";
 
-import { FC } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import ScriptActionsPopover from "./ScriptActionsPopover";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { scriptOptions } from "./queriesMutations";
 import Link from "next/link";
+import { FC } from "react";
+import { scriptOptions } from "./queriesMutations";
+import ScriptActionsPopover from "./ScriptActionsPopover";
 
 /**
  * Component

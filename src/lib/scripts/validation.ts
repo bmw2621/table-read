@@ -15,6 +15,7 @@ export type CreateScriptInput = z.infer<typeof createScriptSchema>;
  * Schema for updating a script
  */
 export const updateScriptSchema = z.object({
+  id: z.string().min(1, "ID is required"),
   title: z.string().min(1, "Title is required"),
   troupeId: z.string().optional(),
 });
