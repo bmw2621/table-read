@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { scripts, troupeMemberships } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, or } from "drizzle-orm";
+import { ScriptWithOwnerType } from "../typedefs";
 
 /**
  * Create a new script
@@ -52,3 +53,45 @@ export async function createScript(params: {
 
   return script;
 }
+
+export const getUserScripts = async (userId: string) => {
+  const userTroupes = await db
+    .select({ troupeId: troupeMemberships.troupeId })
+    .from(troupeMemberships)
+    .where(eq(troupeMemberships.userId, userId));
+
+  const troupeIds = Array.isArray(userTroupes)
+    ? userTroupes.map((ut) => ut.troupeId)
+    : [];
+
+  // Get scripts: user-owned OR troupe-owned (where user is member)
+  let userScripts;
+  if (troupeIds.length === 0) {
+    // Only user-owned scripts
+    userScripts = await db
+      .select()
+      .from(scripts)
+      .where(eq(scripts.userId, userId));
+  } else {
+    // User-owned OR troupe-owned scripts
+    const conditions = [eq(scripts.userId, userId)];
+    troupeIds.forEach((tid) => {
+      conditions.push(eq(scripts.troupeId, tid));
+    });
+    userScripts = await db
+      .select()
+      .from(scripts)
+      .where(or(...conditions));
+  }
+
+  // Format scripts with ownerType
+  const formattedScripts = userScripts.map(
+    (script) =>
+      ({
+        ...script,
+        ownerType: script.userId ? "user" : "troupe",
+      } as ScriptWithOwnerType)
+  );
+
+  return formattedScripts;
+};

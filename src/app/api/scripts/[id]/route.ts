@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { updateScriptSchema } from "@/lib/scripts/validation";
-import { canAccessScript } from "@/lib/scripts/access";
-import { isDirector } from "@/lib/troupes/permissions";
 import { db } from "@/lib/db";
-import { scripts, troupeMemberships } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+import { scripts } from "@/lib/db/schema";
+import { canAccessScript } from "@/lib/scripts/access";
+import { updateScriptSchema } from "@/lib/scripts/validation";
+import { isDirector } from "@/lib/troupes/permissions";
+import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
@@ -31,7 +31,12 @@ export async function GET(
 
   if (!script) {
     return NextResponse.json(
-      { error: "NotFound", message: "Script not found", status: 404, ok: false },
+      {
+        error: "NotFound",
+        message: "Script not found",
+        status: 404,
+        ok: false,
+      },
       { status: 404 }
     );
   }
@@ -54,8 +59,9 @@ export async function GET(
   return NextResponse.json({
     script: {
       ...script,
-      ownerType: script.userId ? "user" : "troupe",
-      canEdit: script.userId === userId || (script.troupeId !== null && hasAccess), // Owner or troupe member can edit
+      ownerType: script.troupeId ? "troupe" : "user",
+      canEdit:
+        script.userId === userId || (script.troupeId !== null && hasAccess), // Owner or troupe member can edit
     },
     status: 200,
     ok: true,
@@ -102,7 +108,12 @@ export async function PUT(
 
     if (!script) {
       return NextResponse.json(
-        { error: "NotFound", message: "Script not found", status: 404, ok: false },
+        {
+          error: "NotFound",
+          message: "Script not found",
+          status: 404,
+          ok: false,
+        },
         { status: 404 }
       );
     }
@@ -125,7 +136,7 @@ export async function PUT(
     const [updatedScript] = await db
       .update(scripts)
       .set({
-        title: validation.data.title,
+        ...validation.data,
         updatedAt: new Date(),
       })
       .where(eq(scripts.id, id))
@@ -175,7 +186,12 @@ export async function DELETE(
 
     if (!script) {
       return NextResponse.json(
-        { error: "NotFound", message: "Script not found", status: 404, ok: false },
+        {
+          error: "NotFound",
+          message: "Script not found",
+          status: 404,
+          ok: false,
+        },
         { status: 404 }
       );
     }
