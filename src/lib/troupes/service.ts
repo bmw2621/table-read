@@ -1,7 +1,42 @@
 import { db } from "@/lib/db";
-import { troupes, troupeMemberships } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+import { troupeMemberships, troupes } from "@/lib/db/schema";
+import { and, eq } from "drizzle-orm";
+import { Troupe, TroupeWithCount } from "../typedefs";
 import { canManageTroupe, isDirector } from "./permissions";
+
+/**
+ * Get user's troupes
+ * @param userId - The user ID
+ * @returns The user's troupes
+ */
+export async function getUserTroupes(
+  userId: string
+): Promise<TroupeWithCount[]> {
+  const userTroupes = await db
+    .select({
+      troupe: troupes,
+    })
+    .from(troupes)
+    .innerJoin(troupeMemberships, eq(troupeMemberships.troupeId, troupes.id))
+    .where(eq(troupeMemberships.userId, userId));
+
+  // Get member counts for each troupe
+  const troupesWithCounts: TroupeWithCount[] = await Promise.all(
+    userTroupes.map(async ({ troupe }) => {
+      const members = await db
+        .select()
+        .from(troupeMemberships)
+        .where(eq(troupeMemberships.troupeId, troupe.id));
+
+      return {
+        ...(troupe as Troupe),
+        isDirector: troupe.directorId === userId,
+        memberCount: members.length,
+      };
+    })
+  );
+  return troupesWithCounts as TroupeWithCount[];
+}
 
 /**
  * Create a new troupe with the specified user as director
@@ -16,7 +51,7 @@ export async function createTroupe(directorId: string, name: string) {
     .insert(troupes)
     .values({
       directorId,
-      name
+      name,
     })
     .returning();
 
@@ -93,12 +128,12 @@ export async function removeMember(
   const isUserDirector = await isDirector(requestingUserId, troupeId);
   const isUserManager = await canManageTroupe(requestingUserId, troupeId);
   const isUserDeletingSelf = targetUserId === requestingUserId;
-  
+
   // Check if user is trying to remove themselves
   if (isUserDeletingSelf && isUserDirector) {
     throw new Error("Director cannot remove themselves");
   }
-  
+
   // Removing someone else requires director permission
   if (!isUserManager && !isUserDeletingSelf) {
     throw new Error("Only a troupe manager can remove members");
@@ -131,4 +166,3 @@ export async function deleteTroupe(troupeId: string, directorId: string) {
   // Delete troupe (cascades to memberships via foreign key)
   await db.delete(troupes).where(eq(troupes.id, troupeId));
 }
-

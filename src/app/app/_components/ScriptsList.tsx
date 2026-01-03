@@ -1,11 +1,10 @@
 "use client";
 
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { useAccount } from "@/lib/providers/AccountProvider";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { FC } from "react";
-import { scriptOptions } from "./queriesMutations";
+import { scriptOptions, troupeOptions } from "../queriesMutations";
 import ScriptActionsPopover from "./ScriptActionsPopover";
 
 /**
@@ -13,8 +12,7 @@ import ScriptActionsPopover from "./ScriptActionsPopover";
  */
 const ScriptsList: FC = () => {
   const { data: scripts } = useSuspenseQuery(scriptOptions);
-  const { troupes, isLoadingTroupes } = useAccount();
-
+  const { data: troupes } = useSuspenseQuery(troupeOptions);
   return (
     <Table>
       <TableBody>
@@ -23,14 +21,11 @@ const ScriptsList: FC = () => {
             <TableCell>
               <Link href={`/scripts/${script.id}`}>{script.title}</Link>
             </TableCell>
-            {!isLoadingTroupes && (
-              <TableCell>
-                {script.troupeId
-                  ? troupes?.find((troupe) => troupe.id === script.troupeId)
-                      ?.name
-                  : "-"}
-              </TableCell>
-            )}
+            <TableCell>
+              {script.troupeId
+                ? troupes?.find((troupe) => troupe.id === script.troupeId)?.name
+                : "-"}
+            </TableCell>
             <TableCell align="right">
               <ScriptActionsPopover script={script} />
             </TableCell>

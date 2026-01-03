@@ -9,3 +9,8 @@ export const approveMemberSchema = z.object({
 
 export type ApproveMemberInput = z.infer<typeof approveMemberSchema>;
 
+export const createTroupeSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+});
+
+export type CreateTroupeInput = z.infer<typeof createTroupeSchema>;

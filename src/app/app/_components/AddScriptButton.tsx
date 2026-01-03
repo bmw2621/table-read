@@ -16,7 +16,7 @@ import {
 } from "@/lib/scripts/validation";
 import { LoaderCircle, Plus } from "lucide-react";
 import { useState } from "react";
-import { useScriptCreate } from "./queriesMutations";
+import { useScriptCreate } from "../queriesMutations";
 
 /**
  * Component

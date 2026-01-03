@@ -1,12 +1,13 @@
 import { auth } from "@/lib/auth";
-import { getUserScripts } from "@/lib/scripts/service";
 import { redirect } from "next/navigation";
-import ScriptsList from "./ScriptsList";
 
+import { getUserScripts } from "@/lib/scripts/service";
+import { getUserTroupes } from "@/lib/troupes/service";
 import { getQueryClient } from "@/lib/utils/getQueryClient";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import AddScriptButton from "./AddScriptButton";
-import { scriptOptions } from "./queriesMutations";
+import UserScripts from "./_components/UserScripts";
+import UserTroupes from "./_components/UserTroupes";
+import { scriptOptions, troupeOptions } from "./queriesMutations";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -15,27 +16,21 @@ export default async function DashboardPage() {
     redirect("/signin");
   }
 
-  const scripts = await getUserScripts(session.user.id);
+  const [scripts, troupes] = await Promise.all([
+    getUserScripts(session.user.id),
+    getUserTroupes(session.user.id),
+  ]);
   const queryClient = getQueryClient();
+  console.log("**********************", troupes, "**********************");
 
   queryClient.setQueryData(scriptOptions.queryKey, scripts);
+  queryClient.setQueryData(troupeOptions.queryKey, troupes);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="min-h-screen mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="rounded-lg bg-white p-6 shadow-sm">
-          <div className="space-y-4">
-            <div className="rounded-md border border-gray-200 p-4">
-              <div className="flex justify-between items-center">
-                <h2 className="text-lg font-semibold text-gray-900">Scripts</h2>
-                <AddScriptButton />
-              </div>
-              <div className="max-h-96 overflow-y-auto">
-                <ScriptsList />
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="min-h-screen mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-5">
+        <UserTroupes />
+        <UserScripts />
       </div>
     </HydrationBoundary>
   );
