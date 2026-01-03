@@ -59,14 +59,11 @@ export const useScriptDelete = (onSuccess: () => void) =>
 export const useScriptUpdate = (onSuccess: () => void) =>
   useMutation(
     mutationOptions({
-      mutationFn: async (data: UpdateScriptInput) => {
-        const response = await fetch(`/api/scripts/${data.id}`, {
+      mutationFn: async (data: UpdateScriptInput) =>
+        fetch(`/api/scripts/${data.id}`, {
           method: "PUT",
           body: JSON.stringify(data),
-        });
-        const responseData = await response.json();
-        console.log(responseData);
-      },
+        }),
       onSuccess: async () => {
         await queryClient.invalidateQueries({
           queryKey: scriptOptions.queryKey,
@@ -79,14 +76,11 @@ export const useScriptUpdate = (onSuccess: () => void) =>
 export const useScriptCreate = (onSuccess: () => void) =>
   useMutation(
     mutationOptions({
-      mutationFn: async (data: CreateScriptInput) => {
-        const response = await fetch(`/api/scripts`, {
+      mutationFn: async (data: CreateScriptInput) =>
+        fetch(`/api/scripts`, {
           method: "POST",
           body: JSON.stringify(data),
-        });
-        const responseData = await response.json();
-        console.log(responseData);
-      },
+        }),
       onSuccess: async () => {
         await queryClient.invalidateQueries({
           queryKey: scriptOptions.queryKey,
