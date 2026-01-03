@@ -1,8 +1,5 @@
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { troupeMemberships, troupes } from "@/lib/db/schema";
-import { createTroupe } from "@/lib/troupes/service";
-import { eq } from "drizzle-orm";
+import { createTroupe, getUserTroupes } from "@/lib/troupes/service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -17,32 +14,10 @@ export async function GET(request: NextRequest) {
   const userId = session.user.id;
 
   // Get user's troupes
-  const userTroupes = await db
-    .select({
-      troupe: troupes,
-    })
-    .from(troupes)
-    .innerJoin(troupeMemberships, eq(troupeMemberships.troupeId, troupes.id))
-    .where(eq(troupeMemberships.userId, userId));
-
-  // Get member counts for each troupe
-  const troupesWithCounts = await Promise.all(
-    userTroupes.map(async (item) => {
-      const members = await db
-        .select()
-        .from(troupeMemberships)
-        .where(eq(troupeMemberships.troupeId, item.troupe.id));
-
-      return {
-        ...item.troupe,
-        isDirector: item.troupe.directorId === userId,
-        memberCount: members.length,
-      };
-    })
-  );
+  const troupes = await getUserTroupes(userId);
 
   return NextResponse.json({
-    troupes: troupesWithCounts,
+    troupes,
     status: 200,
     ok: true,
   });
