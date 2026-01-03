@@ -99,7 +99,7 @@ describe("Troupe API Contract Tests", () => {
   describe("GET /api/troupes/[id]", () => {
     it("should return 200 with troupe details when authenticated and member", async () => {
       const request = new NextRequest(`http://localhost/api/troupes/${mockTroupeId}`);
-      const response = await GETById(request, { params: { id: mockTroupeId } });
+      const response = await GETById(request, { params: Promise.resolve({ id: mockTroupeId }) });
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -113,7 +113,7 @@ describe("Troupe API Contract Tests", () => {
       (auth as jest.Mock).mockResolvedValue(null);
 
       const request = new NextRequest(`http://localhost/api/troupes/${mockTroupeId}`);
-      const response = await GETById(request, { params: { id: mockTroupeId } });
+      const response = await GETById(request, { params: Promise.resolve({ id: mockTroupeId }) });
       const data = await response.json();
 
       expect(response.status).toBe(401);
@@ -128,7 +128,7 @@ describe("Troupe API Contract Tests", () => {
       const request = new NextRequest(`http://localhost/api/troupes/${mockTroupeId}`, {
         method: "DELETE",
       });
-      const response = await DELETE(request, { params: { id: mockTroupeId } });
+      const response = await DELETE(request, { params: Promise.resolve({ id: mockTroupeId }) });
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -145,7 +145,7 @@ describe("Troupe API Contract Tests", () => {
       const request = new NextRequest(`http://localhost/api/troupes/${mockTroupeId}`, {
         method: "DELETE",
       });
-      const response = await DELETE(request, { params: { id: mockTroupeId } });
+      const response = await DELETE(request, { params: Promise.resolve({ id: mockTroupeId }) });
       const data = await response.json();
 
       expect(response.status).toBe(403);
@@ -169,7 +169,7 @@ describe("Troupe API Contract Tests", () => {
         method: "POST",
         body: JSON.stringify({ userId: mockMemberId }),
       });
-      const response = await POSTMember(request, { params: { id: mockTroupeId } });
+      const response = await POSTMember(request, { params: Promise.resolve({ id: mockTroupeId }) });
       const data = await response.json();
 
       expect(response.status).toBe(201);
@@ -187,7 +187,7 @@ describe("Troupe API Contract Tests", () => {
         method: "POST",
         body: JSON.stringify({ userId: mockMemberId }),
       });
-      const response = await POSTMember(request, { params: { id: mockTroupeId } });
+      const response = await POSTMember(request, { params: Promise.resolve({ id: mockTroupeId }) });
       const data = await response.json();
 
       expect(response.status).toBe(403);
@@ -206,7 +206,7 @@ describe("Troupe API Contract Tests", () => {
         }
       );
       const response = await DELETEMember(request, {
-        params: { id: mockTroupeId, userId: mockMemberId },
+        params: Promise.resolve({ id: mockTroupeId, userId: mockMemberId }),
       });
       const data = await response.json();
 
@@ -228,7 +228,7 @@ describe("Troupe API Contract Tests", () => {
         }
       );
       const response = await DELETEMember(request, {
-        params: { id: mockTroupeId, userId: mockMemberId },
+        params: Promise.resolve({ id: mockTroupeId, userId: mockMemberId }),
       });
       const data = await response.json();
 
