@@ -42,7 +42,7 @@ describe("E2E: Access Control Flow", () => {
     testNonMemberId = nonMember.id;
 
     // Create a troupe
-    const troupe = await createTroupe(testDirectorId);
+    const troupe = await createTroupe(testDirectorId, "Test Troupe");
     testTroupeId = troupe.id;
 
     // Add member to troupe

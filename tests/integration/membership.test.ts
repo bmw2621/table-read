@@ -29,7 +29,7 @@ describe("Membership Management", () => {
     testMemberId = member.id;
 
     // Create test troupe
-    const troupe = await createTroupe(testDirectorId);
+    const troupe = await createTroupe(testDirectorId, "Test Troupe");
     testTroupeId = troupe.id;
   });
 
@@ -177,7 +177,7 @@ describe("Membership Management", () => {
 
       await expect(
         removeMember(testTroupeId, testMemberId, nonDirector.id)
-      ).rejects.toThrow("Only the director can remove members");
+      ).rejects.toThrow("Only a troupe manager can remove members");
 
       // Cleanup
       await db.delete(users).where(eq(users.id, nonDirector.id));

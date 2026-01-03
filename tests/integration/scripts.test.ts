@@ -31,7 +31,7 @@ describe("Script CRUD Operations", () => {
     testMemberId = testMember.id;
 
     // Create a test troupe
-    const troupe = await createTroupe(testUserId);
+    const troupe = await createTroupe(testUserId, "Test Troupe");
     testTroupeId = troupe.id;
 
     // Add member to troupe
@@ -219,7 +219,7 @@ describe("Script CRUD Operations", () => {
 
     it("should allow users to access scripts from multiple troupes", async () => {
       // Create another troupe and add testUserId as member
-      const troupe2 = await createTroupe(testUserId);
+      const troupe2 = await createTroupe(testUserId, "Test Troupe 2");
       const troupe2Script = await createScript({
         title: "Second Troupe Script",
         userId: testUserId,

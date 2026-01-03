@@ -32,7 +32,7 @@ describe("E2E: Troupe Creation and Director Assignment Flow", () => {
 
   it("should create troupe and automatically assign user as director and first member", async () => {
     // Step 1: User creates a troupe
-    const troupe = await createTroupe(testDirectorId);
+    const troupe = await createTroupe(testDirectorId, "Test Troupe");
     testTroupeId = troupe.id;
 
     // Step 2: Verify troupe was created with correct director
