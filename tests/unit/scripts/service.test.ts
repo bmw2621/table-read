@@ -1,4 +1,3 @@
-import { createScript } from "@/lib/scripts/service";
 import { db } from "@/lib/db";
 import { scripts, troupeMemberships } from "@/lib/db/schema";
 
@@ -9,6 +8,9 @@ jest.mock("@/lib/db", () => ({
     select: jest.fn(),
   },
 }));
+
+// Import service function - this will be the real implementation
+import { createScript } from "@/lib/scripts/service";
 
 describe("Script Service", () => {
   const mockUserId = "user-123";

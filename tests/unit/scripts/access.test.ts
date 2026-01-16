@@ -1,4 +1,3 @@
-import { canAccessScript } from "@/lib/scripts/access";
 import { db } from "@/lib/db";
 import { scripts, troupeMemberships } from "@/lib/db/schema";
 
@@ -8,6 +7,9 @@ jest.mock("@/lib/db", () => ({
     select: jest.fn(),
   },
 }));
+
+// Import access function - this will be the real implementation
+import { canAccessScript } from "@/lib/scripts/access";
 
 describe("Script Access Control", () => {
   const mockUserId = "user-123";

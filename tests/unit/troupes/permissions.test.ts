@@ -1,4 +1,3 @@
-import { canManageTroupe } from "@/lib/troupes/permissions";
 import { db } from "@/lib/db";
 import { troupes } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -9,6 +8,9 @@ jest.mock("@/lib/db", () => ({
     select: jest.fn(),
   },
 }));
+
+// Import permissions function - this will be the real implementation
+import { canManageTroupe } from "@/lib/troupes/permissions";
 
 describe("Troupe Permissions", () => {
   const mockUserId = "user-123";

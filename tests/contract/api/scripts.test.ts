@@ -8,22 +8,6 @@ jest.mock("@/lib/auth", () => ({
   auth: jest.fn(),
 }));
 
-// Mock services
-jest.mock("@/lib/scripts/service", () => ({
-  createScript: jest.fn(),
-  getUserScripts: jest.fn(),
-}));
-
-// Mock access control
-jest.mock("@/lib/scripts/access", () => ({
-  canAccessScript: jest.fn(),
-}));
-
-// Mock permissions
-jest.mock("@/lib/troupes/permissions", () => ({
-  isDirector: jest.fn(),
-}));
-
 // Mock db for GET routes
 jest.mock("@/lib/db", () => ({
   db: {
@@ -33,26 +17,55 @@ jest.mock("@/lib/db", () => ({
   },
 }));
 
+// Import services - these will be real implementations
+import * as scriptService from "@/lib/scripts/service";
+import * as scriptAccess from "@/lib/scripts/access";
+import * as troupePermissions from "@/lib/troupes/permissions";
 import { db } from "@/lib/db";
-import { canAccessScript } from "@/lib/scripts/access";
-import { createScript, getUserScripts } from "@/lib/scripts/service";
-import { isDirector } from "@/lib/troupes/permissions";
+
+// Create spies for services - these will wrap the real implementations
+// and can be mocked per test without affecting unit tests
+let createScript: jest.SpyInstance;
+let getUserScripts: jest.SpyInstance;
+let canAccessScript: jest.SpyInstance;
+let isDirector: jest.SpyInstance;
 
 describe("Script API Contract Tests", () => {
   const mockUserId = "user-123";
   const mockTroupeId = "troupe-456";
   const mockScriptId = "script-789";
 
+  beforeAll(() => {
+    // Create spies once before all tests
+    createScript = jest.spyOn(scriptService, "createScript");
+    getUserScripts = jest.spyOn(scriptService, "getUserScripts");
+    canAccessScript = jest.spyOn(scriptAccess, "canAccessScript");
+    isDirector = jest.spyOn(troupePermissions, "isDirector");
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
     (auth as jest.Mock).mockResolvedValue({
       user: { id: mockUserId },
     });
+    // Reset service spies
+    createScript.mockReset();
+    getUserScripts.mockReset();
+    canAccessScript.mockReset();
+    isDirector.mockReset();
+  });
+
+  afterAll(() => {
+    // Restore all spies to original implementations to avoid affecting other tests
+    createScript.mockRestore();
+    getUserScripts.mockRestore();
+    canAccessScript.mockRestore();
+    isDirector.mockRestore();
   });
 
   describe("GET /api/scripts", () => {
     it("should return 200 with scripts list when authenticated", async () => {
-      (getUserScripts as jest.Mock).mockResolvedValue([]);
+      getUserScripts.mockResolvedValue([]);
 
       const request = new NextRequest("http://localhost/api/scripts");
       const response = await GET(request);
@@ -78,7 +91,7 @@ describe("Script API Contract Tests", () => {
         ownerType: "troupe",
       };
 
-      (getUserScripts as jest.Mock).mockResolvedValue([mockTroupeScript]);
+      getUserScripts.mockResolvedValue([mockTroupeScript]);
 
       const request = new NextRequest("http://localhost/api/scripts");
       const response = await GET(request);
@@ -115,7 +128,7 @@ describe("Script API Contract Tests", () => {
         updatedAt: new Date(),
       };
 
-      (createScript as jest.Mock).mockResolvedValue(mockScript);
+      createScript.mockResolvedValue(mockScript);
 
       const request = new NextRequest("http://localhost/api/scripts", {
         method: "POST",
@@ -144,7 +157,7 @@ describe("Script API Contract Tests", () => {
         updatedAt: new Date(),
       };
 
-      (createScript as jest.Mock).mockResolvedValue(mockScript);
+      createScript.mockResolvedValue(mockScript);
 
       const request = new NextRequest("http://localhost/api/scripts", {
         method: "POST",
@@ -197,7 +210,7 @@ describe("Script API Contract Tests", () => {
     });
 
     it("should return 403 when user is not a member of troupe", async () => {
-      (createScript as jest.Mock).mockRejectedValue(
+      createScript.mockRejectedValue(
         new Error("You are not a member of this troupe")
       );
 
@@ -238,7 +251,7 @@ describe("Script API Contract Tests", () => {
         }),
       });
 
-      (canAccessScript as jest.Mock).mockResolvedValue(true);
+      canAccessScript.mockResolvedValue(true);
 
       const request = new NextRequest(
         `http://localhost/api/scripts/${mockScriptId}`
@@ -315,7 +328,7 @@ describe("Script API Contract Tests", () => {
         }),
       });
 
-      (canAccessScript as jest.Mock).mockResolvedValue(false);
+      canAccessScript.mockResolvedValue(false);
 
       const request = new NextRequest(
         `http://localhost/api/scripts/${mockScriptId}`
@@ -358,7 +371,7 @@ describe("Script API Contract Tests", () => {
         }),
       });
 
-      (canAccessScript as jest.Mock).mockResolvedValue(true);
+      canAccessScript.mockResolvedValue(true);
 
       const request = new NextRequest(
         `http://localhost/api/scripts/${mockScriptId}`
@@ -402,7 +415,7 @@ describe("Script API Contract Tests", () => {
         }),
       });
 
-      (canAccessScript as jest.Mock).mockResolvedValue(true);
+      canAccessScript.mockResolvedValue(true);
 
       // Mock db.update
       const mockUpdate = jest.fn().mockReturnValue({
@@ -598,7 +611,7 @@ describe("Script API Contract Tests", () => {
       });
 
       // Mock director check
-      (isDirector as jest.Mock).mockResolvedValue(true);
+      isDirector.mockResolvedValue(true);
 
       // Mock db.delete
       const mockDelete = jest.fn().mockReturnValue({
@@ -644,7 +657,7 @@ describe("Script API Contract Tests", () => {
       });
 
       // Mock director check - user is NOT director
-      (isDirector as jest.Mock).mockResolvedValue(false);
+      isDirector.mockResolvedValue(false);
 
       const request = new NextRequest(
         `http://localhost/api/scripts/${mockScriptId}`,

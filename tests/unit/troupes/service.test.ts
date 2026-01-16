@@ -1,9 +1,3 @@
-import {
-  createTroupe,
-  approveMember,
-  removeMember,
-  deleteTroupe,
-} from "@/lib/troupes/service";
 import { db } from "@/lib/db";
 import { troupes, troupeMemberships } from "@/lib/db/schema";
 
@@ -21,6 +15,14 @@ jest.mock("@/lib/troupes/permissions", () => ({
   isDirector: jest.fn(),
   canManageTroupe: jest.fn(),
 }));
+
+// Import service functions - these will be the real implementations
+import {
+  createTroupe,
+  approveMember,
+  removeMember,
+  deleteTroupe,
+} from "@/lib/troupes/service";
 
 import { isDirector } from "@/lib/troupes/permissions";
 import { canManageTroupe } from "@/lib/troupes/permissions";
