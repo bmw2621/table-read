@@ -1,9 +1,3 @@
-import {
-  createTroupe,
-  approveMember,
-  removeMember,
-  deleteTroupe,
-} from "@/lib/troupes/service";
 import { db } from "@/lib/db";
 import { troupes, troupeMemberships } from "@/lib/db/schema";
 
@@ -22,6 +16,14 @@ jest.mock("@/lib/troupes/permissions", () => ({
   canManageTroupe: jest.fn(),
 }));
 
+// Import service functions - these will be the real implementations
+import {
+  createTroupe,
+  approveMember,
+  removeMember,
+  deleteTroupe,
+} from "@/lib/troupes/service";
+
 import { isDirector } from "@/lib/troupes/permissions";
 import { canManageTroupe } from "@/lib/troupes/permissions";
 
@@ -33,7 +35,7 @@ describe("Troupe Service", () => {
   const mockMembershipId = "membership-101";
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
     
     // Reset db.delete mock to return proper chainable object
     (db.delete as jest.Mock).mockImplementation(() => ({
@@ -46,6 +48,10 @@ describe("Troupe Service", () => {
         returning: jest.fn().mockResolvedValue([]),
       }),
     }));
+    
+    // Reset permission mocks
+    (isDirector as jest.Mock).mockReset();
+    (canManageTroupe as jest.Mock).mockReset();
   });
 
   describe("createTroupe", () => {
@@ -58,24 +64,26 @@ describe("Troupe Service", () => {
         updatedAt: new Date(),
       };
 
-      const mockInsertTroupe = jest.fn().mockReturnValue({
+      const mockInsertTroupe = {
         values: jest.fn().mockReturnValue({
           returning: jest.fn().mockResolvedValue([mockTroupe]),
         }),
-      });
+      };
 
-      const mockInsertMembership = jest.fn().mockReturnValue({
+      const mockInsertMembership = {
         values: jest.fn().mockResolvedValue(undefined),
-      });
+      };
 
       (db.insert as jest.Mock)
-        .mockReturnValueOnce(mockInsertTroupe(troupes))
-        .mockReturnValueOnce(mockInsertMembership(troupeMemberships));
+        .mockReturnValueOnce(mockInsertTroupe)
+        .mockReturnValueOnce(mockInsertMembership);
 
       const result = await createTroupe(mockDirectorId, mockTroupeName);
 
       expect(result).toEqual(mockTroupe);
       expect(db.insert).toHaveBeenCalledTimes(2);
+      expect(db.insert).toHaveBeenNthCalledWith(1, troupes);
+      expect(db.insert).toHaveBeenNthCalledWith(2, troupeMemberships);
     });
   });
 
@@ -100,7 +108,7 @@ describe("Troupe Service", () => {
       };
 
       // Override the default mock for this test to return the membership
-      (db.insert as jest.Mock).mockReturnValueOnce({
+      (db.insert as jest.Mock).mockReturnValue({
         values: jest.fn().mockReturnValue({
           returning: jest.fn().mockResolvedValue([mockMembership]),
         }),
@@ -185,8 +193,9 @@ describe("Troupe Service", () => {
 
       await expect(
         removeMember(mockTroupeId, mockUserId, "non-director-id")
-      ).rejects.toThrow("Only a troupe manager can remove members");
+      ).rejects.toThrow("Only the director can remove members");
       
+      // Note: isDirector is called first, then canManageTroupe
       expect(isDirector).toHaveBeenCalledWith("non-director-id", mockTroupeId);
       expect(canManageTroupe).toHaveBeenCalledWith("non-director-id", mockTroupeId);
     });

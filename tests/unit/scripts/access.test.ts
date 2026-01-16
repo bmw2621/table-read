@@ -1,4 +1,3 @@
-import { canAccessScript } from "@/lib/scripts/access";
 import { db } from "@/lib/db";
 import { scripts, troupeMemberships } from "@/lib/db/schema";
 
@@ -8,6 +7,9 @@ jest.mock("@/lib/db", () => ({
     select: jest.fn(),
   },
 }));
+
+// Import access function - this will be the real implementation
+import { canAccessScript } from "@/lib/scripts/access";
 
 describe("Script Access Control", () => {
   const mockUserId = "user-123";
@@ -34,7 +36,7 @@ describe("Script Access Control", () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   describe("canAccessScript", () => {
@@ -48,13 +50,14 @@ describe("Script Access Control", () => {
 
     it("should return true when user is a member of the troupe that owns the script", async () => {
       // Mock membership check - user is a member
-      (db.select as jest.Mock).mockReturnValue({
+      const mockSelect = {
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockReturnValue({
             limit: jest.fn().mockResolvedValue([{ id: "membership-123" }]),
           }),
         }),
-      });
+      };
+      (db.select as jest.Mock).mockReturnValue(mockSelect);
 
       const result = await canAccessScript(mockUserId, mockTroupeOwnedScript);
 
@@ -64,13 +67,14 @@ describe("Script Access Control", () => {
 
     it("should return false when user is not a member of the troupe that owns the script", async () => {
       // Mock membership check - user is NOT a member
-      (db.select as jest.Mock).mockReturnValue({
+      const mockSelect = {
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockReturnValue({
             limit: jest.fn().mockResolvedValue([]),
           }),
         }),
-      });
+      };
+      (db.select as jest.Mock).mockReturnValue(mockSelect);
 
       const result = await canAccessScript(mockOtherUserId, mockTroupeOwnedScript);
 

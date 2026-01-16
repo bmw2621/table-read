@@ -40,7 +40,7 @@ describe("E2E: Membership Management Flow", () => {
     testNonDirectorId = nonDirector.id;
 
     // Create a troupe
-    const troupe = await createTroupe(testDirectorId);
+    const troupe = await createTroupe(testDirectorId, "Membership Test Troupe");
     testTroupeId = troupe.id;
   });
 

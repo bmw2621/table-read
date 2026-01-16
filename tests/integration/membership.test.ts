@@ -29,7 +29,7 @@ describe("Membership Management", () => {
     testMemberId = member.id;
 
     // Create test troupe
-    const troupe = await createTroupe(testDirectorId);
+    const troupe = await createTroupe(testDirectorId, "Membership Test Troupe");
     testTroupeId = troupe.id;
   });
 

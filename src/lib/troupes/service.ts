@@ -136,7 +136,7 @@ export async function removeMember(
 
   // Removing someone else requires director permission
   if (!isUserManager && !isUserDeletingSelf) {
-    throw new Error("Only a troupe manager can remove members");
+    throw new Error("Only the director can remove members");
   }
 
   // Remove membership
