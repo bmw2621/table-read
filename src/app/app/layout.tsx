@@ -1,8 +1,8 @@
-import Providers from "@/lib/providers";
-import { FC, PropsWithChildren } from "react";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import Header from "@/components/layout/Header";
+import { auth } from "@/lib/auth";
+import Providers from "@/lib/providers";
+import { redirect } from "next/navigation";
+import { FC, PropsWithChildren } from "react";
 
 const AppLayout: FC<PropsWithChildren> = async ({ children }) => {
   const session = await auth();
@@ -18,7 +18,7 @@ const AppLayout: FC<PropsWithChildren> = async ({ children }) => {
       <footer className="bg-primary">
         <div className="w-full max-w-7xl mx-auto px-8 py-4 text-center">
           <p className="text-primary-foreground text-xs">
-            © 2025 Table Read. All rights reserved.
+            © {new Date().getFullYear()} Table Read. All rights reserved.
           </p>
         </div>
       </footer>

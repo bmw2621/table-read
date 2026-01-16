@@ -13,15 +13,15 @@ export default async function DashboardPage() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect("/signin");
+    return redirect("/signin");
   }
 
   const [scripts, troupes] = await Promise.all([
     getUserScripts(session.user.id),
     getUserTroupes(session.user.id),
   ]);
+
   const queryClient = getQueryClient();
-  console.log("**********************", troupes, "**********************");
 
   queryClient.setQueryData(scriptOptions.queryKey, scripts);
   queryClient.setQueryData(troupeOptions.queryKey, troupes);

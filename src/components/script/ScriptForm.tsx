@@ -3,6 +3,7 @@
 import { ScriptWithOwnerType } from "@/lib/typedefs";
 import { FC } from "react";
 
+import { troupeOptions } from "@/app/app/queriesMutations";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,9 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAccount } from "@/lib/providers/AccountProvider";
 import { CreateScriptInput, UpdateScriptInput } from "@/lib/scripts/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { ZodSchema } from "zod";
 
@@ -53,7 +54,7 @@ const ScriptForm: FC<Props> = ({ onSubmit, resolver, action, script }) => {
     resolver: zodResolver(resolver),
     defaultValues,
   });
-  const { troupes } = useAccount();
+  const { data: troupes } = useSuspenseQuery(troupeOptions);
   return (
     <form
       id="script-form"
