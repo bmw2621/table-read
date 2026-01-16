@@ -35,7 +35,7 @@ describe("Script Service", () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
 
     // Reset db.insert mock to return proper chainable object
     (db.insert as jest.Mock).mockImplementation(() => ({
@@ -78,13 +78,14 @@ describe("Script Service", () => {
 
     it("should create a troupe-owned script when troupeId is provided and user is a member", async () => {
       // Mock membership check - user is a member
-      (db.select as jest.Mock).mockReturnValue({
+      const mockSelect = {
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockReturnValue({
             limit: jest.fn().mockResolvedValue([{ id: "membership-123" }]),
           }),
         }),
-      });
+      };
+      (db.select as jest.Mock).mockReturnValue(mockSelect);
 
       (db.insert as jest.Mock).mockReturnValue({
         values: jest.fn().mockReturnValue({
@@ -109,13 +110,14 @@ describe("Script Service", () => {
 
     it("should throw error when troupeId is provided but user is not a member", async () => {
       // Mock membership check - user is NOT a member
-      (db.select as jest.Mock).mockReturnValue({
+      const mockSelect = {
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockReturnValue({
             limit: jest.fn().mockResolvedValue([]),
           }),
         }),
-      });
+      };
+      (db.select as jest.Mock).mockReturnValue(mockSelect);
 
       await expect(
         createScript({
@@ -137,6 +139,7 @@ describe("Script Service", () => {
       ).rejects.toThrow("Title is required");
 
       expect(db.insert).not.toHaveBeenCalled();
+      expect(db.select).not.toHaveBeenCalled();
     });
 
     it("should throw error when title is not provided", async () => {
@@ -148,6 +151,7 @@ describe("Script Service", () => {
       ).rejects.toThrow("Title is required");
 
       expect(db.insert).not.toHaveBeenCalled();
+      expect(db.select).not.toHaveBeenCalled();
     });
   });
 });

@@ -32,7 +32,7 @@ describe("Troupe CRUD Operations", () => {
 
   describe("createTroupe", () => {
     it("should create troupe with director as first member", async () => {
-      const troupe = await createTroupe(testDirectorId);
+      const troupe = await createTroupe(testDirectorId, "Test Troupe");
       testTroupeId = troupe.id;
 
       expect(troupe.directorId).toBe(testDirectorId);
@@ -85,7 +85,7 @@ describe("Troupe CRUD Operations", () => {
   describe("deleteTroupe", () => {
     it("should delete troupe and cascade to memberships", async () => {
       // Create another troupe to delete
-      const troupeToDelete = await createTroupe(testDirectorId);
+      const troupeToDelete = await createTroupe(testDirectorId, "Troupe To Delete");
       const troupeToDeleteId = troupeToDelete.id;
 
       await deleteTroupe(troupeToDeleteId, testDirectorId);

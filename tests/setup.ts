@@ -1,4 +1,4 @@
-// Jest setup file
+// Test setup file (compatible with bun test)
 import "@testing-library/jest-dom";
 import { config } from "dotenv";
 import { resolve } from "path";

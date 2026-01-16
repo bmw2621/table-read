@@ -33,7 +33,7 @@ describe("E2E: Script Creation and Access Flow", () => {
     testMemberId = testMember.id;
 
     // Create a troupe
-    const troupe = await createTroupe(testUserId);
+    const troupe = await createTroupe(testUserId, "Script Access Troupe");
     testTroupeId = troupe.id;
 
     // Add member to troupe

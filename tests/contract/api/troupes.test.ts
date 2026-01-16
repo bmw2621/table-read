@@ -26,10 +26,15 @@ describe("Troupe API Contract Tests", () => {
   const mockMemberId = "member-789";
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
     (auth as jest.Mock).mockResolvedValue({
       user: { id: mockUserId },
     });
+    // Reset service mocks to default implementations
+    (createTroupe as jest.Mock).mockReset();
+    (deleteTroupe as jest.Mock).mockReset();
+    (approveMember as jest.Mock).mockReset();
+    (removeMember as jest.Mock).mockReset();
   });
 
   describe("GET /api/troupes", () => {
@@ -63,6 +68,7 @@ describe("Troupe API Contract Tests", () => {
       const mockTroupe = {
         id: mockTroupeId,
         directorId: mockUserId,
+        name: "Test Troupe",
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -71,6 +77,7 @@ describe("Troupe API Contract Tests", () => {
 
       const request = new NextRequest("http://localhost/api/troupes", {
         method: "POST",
+        body: JSON.stringify({ name: "Test Troupe" }),
       });
       const response = await POST(request);
       const data = await response.json();

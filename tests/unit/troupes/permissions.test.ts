@@ -16,7 +16,7 @@ describe("Troupe Permissions", () => {
   const mockDirectorId = "director-789";
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   describe("canManageTroupe", () => {
@@ -24,17 +24,19 @@ describe("Troupe Permissions", () => {
       const mockTroupe = {
         id: mockTroupeId,
         directorId: mockUserId,
+        name: "Test Troupe",
         createdAt: new Date(),
         updatedAt: new Date(),
       };
 
-      (db.select as jest.Mock).mockReturnValue({
+      const mockSelect = {
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockReturnValue({
             limit: jest.fn().mockResolvedValue([mockTroupe]),
           }),
         }),
-      });
+      };
+      (db.select as jest.Mock).mockReturnValue(mockSelect);
 
       const result = await canManageTroupe(mockUserId, mockTroupeId);
       expect(result).toBe(true);
@@ -44,30 +46,33 @@ describe("Troupe Permissions", () => {
       const mockTroupe = {
         id: mockTroupeId,
         directorId: mockDirectorId,
+        name: "Test Troupe",
         createdAt: new Date(),
         updatedAt: new Date(),
       };
 
-      (db.select as jest.Mock).mockReturnValue({
+      const mockSelect = {
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockReturnValue({
             limit: jest.fn().mockResolvedValue([mockTroupe]),
           }),
         }),
-      });
+      };
+      (db.select as jest.Mock).mockReturnValue(mockSelect);
 
       const result = await canManageTroupe(mockUserId, mockTroupeId);
       expect(result).toBe(false);
     });
 
     it("should return false when troupe does not exist", async () => {
-      (db.select as jest.Mock).mockReturnValue({
+      const mockSelect = {
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockReturnValue({
             limit: jest.fn().mockResolvedValue([]),
           }),
         }),
-      });
+      };
+      (db.select as jest.Mock).mockReturnValue(mockSelect);
 
       const result = await canManageTroupe(mockUserId, mockTroupeId);
       expect(result).toBe(false);
