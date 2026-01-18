@@ -19,7 +19,7 @@ const ScriptsList: FC = () => {
         {scripts.map((script) => (
           <TableRow key={script.id}>
             <TableCell>
-              <Link href={`/scripts/${script.id}`}>{script.title}</Link>
+              <Link href={`/app/script/${script.id}`}>{script.title}</Link>
             </TableCell>
             <TableCell>
               {script.troupeId
