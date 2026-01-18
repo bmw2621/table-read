@@ -28,10 +28,8 @@ export default async function DashboardPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="min-h-screen mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-5">
-        <UserTroupes />
-        <UserScripts />
-      </div>
+      <UserTroupes />
+      <UserScripts />
     </HydrationBoundary>
   );
 }

@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { scripts, troupeMemberships } from "@/lib/db/schema";
-import { eq, and, or } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import { ScriptWithOwnerType } from "../typedefs";
 
 /**
@@ -94,4 +94,18 @@ export const getUserScripts = async (userId: string) => {
   );
 
   return formattedScripts;
+};
+
+export const getScript = async (scriptId: string) => {
+  const [script] = await db
+    .select()
+    .from(scripts)
+    .where(eq(scripts.id, scriptId))
+    .limit(1);
+
+  if (!script) {
+    return null;
+  }
+
+  return script;
 };
