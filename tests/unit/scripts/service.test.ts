@@ -10,7 +10,7 @@ jest.mock("@/lib/db", () => ({
 }));
 
 // Import service function - this will be the real implementation
-import { createScript } from "@/lib/scripts/service";
+import { createScript, getScript } from "@/lib/scripts/service";
 
 describe("Script Service", () => {
   const mockUserId = "user-123";
@@ -154,6 +154,63 @@ describe("Script Service", () => {
 
       expect(db.insert).not.toHaveBeenCalled();
       expect(db.select).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("getScript", () => {
+    it("should return a script when it exists", async () => {
+      const mockSelect = {
+        from: jest.fn().mockReturnValue({
+          where: jest.fn().mockReturnValue({
+            limit: jest.fn().mockResolvedValue([mockUserOwnedScript]),
+          }),
+        }),
+      };
+      (db.select as jest.Mock).mockReturnValue(mockSelect);
+
+      const result = await getScript(mockScriptId);
+
+      expect(result).toEqual(mockUserOwnedScript);
+      expect(db.select).toHaveBeenCalled();
+      expect(mockSelect.from).toHaveBeenCalledWith(scripts);
+      expect(mockSelect.from().where).toHaveBeenCalled();
+      expect(mockSelect.from().where().limit).toHaveBeenCalledWith(1);
+    });
+
+    it("should return null when script does not exist", async () => {
+      const mockSelect = {
+        from: jest.fn().mockReturnValue({
+          where: jest.fn().mockReturnValue({
+            limit: jest.fn().mockResolvedValue([]),
+          }),
+        }),
+      };
+      (db.select as jest.Mock).mockReturnValue(mockSelect);
+
+      const result = await getScript(mockScriptId);
+
+      expect(result).toBeNull();
+      expect(db.select).toHaveBeenCalled();
+      expect(mockSelect.from).toHaveBeenCalledWith(scripts);
+      expect(mockSelect.from().where).toHaveBeenCalled();
+      expect(mockSelect.from().where().limit).toHaveBeenCalledWith(1);
+    });
+
+    it("should return troupe-owned script when it exists", async () => {
+      const mockSelect = {
+        from: jest.fn().mockReturnValue({
+          where: jest.fn().mockReturnValue({
+            limit: jest.fn().mockResolvedValue([mockTroupeOwnedScript]),
+          }),
+        }),
+      };
+      (db.select as jest.Mock).mockReturnValue(mockSelect);
+
+      const result = await getScript(mockScriptId);
+
+      expect(result).toEqual(mockTroupeOwnedScript);
+      expect(db.select).toHaveBeenCalled();
+      expect(mockSelect.from).toHaveBeenCalledWith(scripts);
     });
   });
 });
