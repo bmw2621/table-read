@@ -5,6 +5,7 @@ Auto-generated from all feature plans. Last updated: 2025-12-10
 ## Active Technologies
 - TypeScript 5.6.3 + Next.js 15.1.0, drizzle-orm 0.45.1, zod 3.23.8, next-auth 5.0.0-beta.30 (002-troupe-script-models)
 - PostgreSQL (via drizzle-orm) (002-troupe-script-models)
+- PostgreSQL via drizzle-orm with postgres driver (003-scenes-characters-lines)
 
 - TypeScript 5.6.3 + Next.js 15.1.0, React 18.3.1, auth.js (latest compatible), drizzle-orm (latest compatible), @auth/drizzle-adapter (latest compatible) (001-user-authentication)
 
@@ -25,6 +26,7 @@ npm test && npm run lint
 TypeScript 5.6.3: Follow standard conventions
 
 ## Recent Changes
+- 003-scenes-characters-lines: Added TypeScript 5.6.3 + Next.js 15.1.0, drizzle-orm 0.45.1, zod 3.23.8, next-auth 5.0.0-beta.30
 - 002-troupe-script-models: Added TypeScript 5.6.3 + Next.js 15.1.0, drizzle-orm 0.45.1, zod 3.23.8, next-auth 5.0.0-beta.30
 
 - 001-user-authentication: Added TypeScript 5.6.3 + Next.js 15.1.0, React 18.3.1, auth.js (latest compatible), drizzle-orm (latest compatible), @auth/drizzle-adapter (latest compatible)

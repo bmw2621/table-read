@@ -1,10 +1,18 @@
-import { pgTable, text, timestamp, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { createId } from "@paralleldrive/cuid2";
+import {
+  index,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+} from "drizzle-orm/pg-core";
 
 export const users = pgTable(
   "user",
   {
-    id: text("id").primaryKey().$defaultFn(() => createId()),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createId()),
     name: text("name"),
     username: text("username").notNull().unique(),
     email: text("email"),
@@ -14,15 +22,15 @@ export const users = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => [
-   uniqueIndex("username_idx").on(table.username),
-  ]
+  (table) => [uniqueIndex("username_idx").on(table.username)]
 );
 
 export const sessions = pgTable(
   "session",
   {
-    id: text("id").primaryKey().$defaultFn(() => createId()),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createId()),
     userId: text("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -31,17 +39,19 @@ export const sessions = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => ([
+  (table) => [
     index("session_userId_idx").on(table.userId),
     uniqueIndex("session_token_idx").on(table.token),
     index("session_expiresAt_idx").on(table.expiresAt),
-  ])
+  ]
 );
 
 export const accounts = pgTable(
   "account",
   {
-    id: text("id").primaryKey().$defaultFn(() => createId()),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createId()),
     userId: text("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -58,13 +68,13 @@ export const accounts = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => ([
+  (table) => [
     index("account_userId_idx").on(table.userId),
     uniqueIndex("account_provider_providerAccountId_idx").on(
       table.provider,
       table.providerAccountId
     ),
-  ])
+  ]
 );
 
 export const verificationTokens = pgTable("verification_token", {
@@ -77,7 +87,9 @@ export const verificationTokens = pgTable("verification_token", {
 export const troupes = pgTable(
   "troupe",
   {
-    id: text("id").primaryKey().$defaultFn(() => createId()),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createId()),
     directorId: text("directorId")
       .notNull()
       .references(() => users.id, { onDelete: "restrict" }),
@@ -85,15 +97,15 @@ export const troupes = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => ([
-    index("troupe_directorId_idx").on(table.directorId),
-  ])
+  (table) => [index("troupe_directorId_idx").on(table.directorId)]
 );
 
 export const troupeMemberships = pgTable(
   "troupeMembership",
   {
-    id: text("id").primaryKey().$defaultFn(() => createId()),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createId()),
     userId: text("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -103,35 +115,88 @@ export const troupeMemberships = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => ([
+  (table) => [
     index("troupeMembership_userId_idx").on(table.userId),
     index("troupeMembership_troupeId_idx").on(table.troupeId),
     uniqueIndex("troupeMembership_userId_troupeId_idx").on(
       table.userId,
       table.troupeId
     ),
-  ])
+  ]
 );
 
 export const scripts = pgTable(
   "script",
   {
-    id: text("id").primaryKey().$defaultFn(() => createId()),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createId()),
     title: text("title").notNull(),
     // Polymorphic ownership: script belongs to EITHER user OR troupe (mutually exclusive)
     // Cascade behavior: Only deletes script if it belongs to the deleted entity
     // - User-owned (userId set, troupeId null): Deleted when user deleted
     // - Troupe-owned (userId null, troupeId set): Deleted when troupe deleted, NOT when user deleted
-    userId: text("userId")
-      .references(() => users.id, { onDelete: "cascade" }),
-    troupeId: text("troupeId")
-      .references(() => troupes.id, { onDelete: "cascade" }),
+    userId: text("userId").references(() => users.id, { onDelete: "cascade" }),
+    troupeId: text("troupeId").references(() => troupes.id, {
+      onDelete: "cascade",
+    }),
     createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => ([
+  (table) => [
     index("script_userId_idx").on(table.userId),
     index("script_troupeId_idx").on(table.troupeId),
-  ])
+  ]
 );
 
+export const scenes = pgTable(
+  "scene",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    scriptId: text("scriptId")
+      .notNull()
+      .references(() => scripts.id, { onDelete: "cascade" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
+  },
+  (table) => [index("scene_scriptId_idx").on(table.scriptId)]
+);
+
+export const characters = pgTable(
+  "character",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    scriptId: text("scriptId")
+      .notNull()
+      .references(() => scripts.id, { onDelete: "cascade" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
+  },
+  (table) => [index("character_scriptId_idx").on(table.scriptId)]
+);
+
+export const lines = pgTable(
+  "line",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    text: text("text").notNull(),
+    characterId: text("characterId").references(() => characters.id, {
+      onDelete: "set null",
+    }),
+    sceneId: text("sceneId")
+      .notNull()
+      .references(() => scenes.id, { onDelete: "cascade" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("line_sceneId_idx").on(table.sceneId),
+    index("line_characterId_idx").on(table.characterId),
+  ]
+);
