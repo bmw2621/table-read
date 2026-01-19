@@ -17,13 +17,13 @@
 
 **Purpose**: Project structure verification and preparation
 
-- [ ] T001 Verify existing project structure matches plan.md (src/lib/, src/app/api/, tests/ directories exist)
-- [ ] T002 [P] Create src/lib/scenes/ directory structure
-- [ ] T003 [P] Create src/lib/characters/ directory structure
-- [ ] T004 [P] Create src/lib/lines/ directory structure
-- [ ] T005 [P] Create tests/unit/scenes/ directory structure
-- [ ] T006 [P] Create tests/unit/characters/ directory structure
-- [ ] T007 [P] Create tests/unit/lines/ directory structure
+- [x] T001 Verify existing project structure matches plan.md (src/lib/, src/app/api/, tests/ directories exist)
+- [x] T002 [P] Create src/lib/scenes/ directory structure
+- [x] T003 [P] Create src/lib/characters/ directory structure
+- [x] T004 [P] Create src/lib/lines/ directory structure
+- [x] T005 [P] Create tests/unit/scenes/ directory structure
+- [x] T006 [P] Create tests/unit/characters/ directory structure
+- [x] T007 [P] Create tests/unit/lines/ directory structure
 
 ---
 
@@ -33,12 +33,12 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T008 Extend database schema in src/lib/db/schema.ts with scenes table (id, scriptId foreign key with cascade delete, createdAt, updatedAt) with scriptId index
-- [ ] T009 [P] Extend database schema in src/lib/db/schema.ts with characters table (id, scriptId foreign key with cascade delete, createdAt, updatedAt) with scriptId index
-- [ ] T010 [P] Extend database schema in src/lib/db/schema.ts with lines table (id, text, characterId nullable foreign key with set null on delete, sceneId foreign key with cascade delete, createdAt, updatedAt) with sceneId and characterId indexes
-- [ ] T011 Generate database migration using yarn db:gen command
-- [ ] T012 Review generated migration SQL in drizzle/ directory (verify cascade deletes, set null behavior, indexes)
-- [ ] T013 Apply database migration using yarn db:push or yarn db:migrate
+- [x] T008 Extend database schema in src/lib/db/schema.ts with scenes table (id, scriptId foreign key with cascade delete, createdAt, updatedAt) with scriptId index
+- [x] T009 [P] Extend database schema in src/lib/db/schema.ts with characters table (id, scriptId foreign key with cascade delete, createdAt, updatedAt) with scriptId index
+- [x] T010 [P] Extend database schema in src/lib/db/schema.ts with lines table (id, text, characterId nullable foreign key with set null on delete, sceneId foreign key with cascade delete, createdAt, updatedAt) with sceneId and characterId indexes
+- [x] T011 Generate database migration using yarn db:gen command
+- [x] T012 Review generated migration SQL in drizzle/ directory (verify cascade deletes, set null behavior, indexes)
+- [ ] T013 Apply database migration using yarn db:push or yarn db:migrate (SKIPPED - user will apply manually)
 
 **Checkpoint**: Foundation ready - database schema extended with scenes, characters, and lines tables. Migration applied. User story implementation can now begin.
 
@@ -54,23 +54,23 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T014 [P] [US1] Create unit test for scene service in tests/unit/scenes/service.test.ts (createScene, getScenesByScript functions)
-- [ ] T015 [P] [US1] Create unit test for scene validation in tests/unit/scenes/validation.test.ts (createSceneSchema validation)
-- [ ] T016 [P] [US1] Create unit test for scene access control in tests/unit/scenes/access.test.ts (canAccessScene function)
-- [ ] T017 [P] [US1] Create integration test for scene CRUD operations in tests/integration/scenes.test.ts (create scene, list scenes for script, access control)
-- [ ] T018 [P] [US1] Create contract test for GET /api/scripts/[id]/scenes in tests/contract/api/scenes.test.ts
-- [ ] T019 [P] [US1] Create contract test for POST /api/scripts/[id]/scenes in tests/contract/api/scenes.test.ts
+- [x] T014 [P] [US1] Create unit test for scene service in tests/unit/scenes/service.test.ts (createScene, getScenesByScript functions)
+- [x] T015 [P] [US1] Create unit test for scene validation in tests/unit/scenes/validation.test.ts (createSceneSchema validation)
+- [x] T016 [P] [US1] Create unit test for scene access control in tests/unit/scenes/access.test.ts (canAccessScene function)
+- [x] T017 [P] [US1] Create integration test for scene CRUD operations in tests/integration/scenes.test.ts (create scene, list scenes for script, access control)
+- [x] T018 [P] [US1] Create contract test for GET /api/scripts/[id]/scenes in tests/contract/api/scenes.test.ts
+- [x] T019 [P] [US1] Create contract test for POST /api/scripts/[id]/scenes in tests/contract/api/scenes.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T020 [P] [US1] Create scene validation schema in src/lib/scenes/validation.ts (createSceneSchema with Zod)
-- [ ] T021 [P] [US1] Create scene access control utility in src/lib/scenes/access.ts (canAccessScene function that uses canAccessScript)
-- [ ] T022 [US1] Create scene service in src/lib/scenes/service.ts (createScene, getScenesByScript functions with access control)
-- [ ] T023 [US1] Create GET /api/scripts/[id]/scenes route in src/app/api/scripts/[id]/scenes/route.ts (list scenes for script with access control)
-- [ ] T024 [US1] Create POST /api/scripts/[id]/scenes route in src/app/api/scripts/[id]/scenes/route.ts (create scene with access control)
-- [ ] T025 [US1] Add error handling and logging for scene operations in service and API routes
-- [ ] T026 [US1] Add authentication checks to all scene API routes (use existing auth() from @/lib/auth)
-- [ ] T027 [US1] Extend Scene type in src/typedefs/api.ts (export Scene type from schema)
+- [x] T020 [P] [US1] Create scene validation schema in src/lib/scenes/validation.ts (createSceneSchema with Zod)
+- [x] T021 [P] [US1] Create scene access control utility in src/lib/scenes/access.ts (canAccessScene function that uses canAccessScript)
+- [x] T022 [US1] Create scene service in src/lib/scenes/service.ts (createScene, getScenesByScript functions with access control)
+- [x] T023 [US1] Create GET /api/scripts/[id]/scenes route in src/app/api/scripts/[id]/scenes/route.ts (list scenes for script with access control)
+- [x] T024 [US1] Create POST /api/scripts/[id]/scenes route in src/app/api/scripts/[id]/scenes/route.ts (create scene with access control)
+- [x] T025 [US1] Add error handling and logging for scene operations in service and API routes
+- [x] T026 [US1] Add authentication checks to all scene API routes (use existing auth() from @/lib/auth)
+- [x] T027 [US1] Extend Scene type in src/typedefs/api.ts (export Scene type from schema)
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently. Users can create scenes for scripts they have access to, list scenes for a script, and all access control is enforced.
 
@@ -86,23 +86,23 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T028 [P] [US2] Create unit test for character service in tests/unit/characters/service.test.ts (createCharacter, getCharactersByScript functions)
-- [ ] T029 [P] [US2] Create unit test for character validation in tests/unit/characters/validation.test.ts (createCharacterSchema validation)
-- [ ] T030 [P] [US2] Create unit test for character access control in tests/unit/characters/access.test.ts (canAccessCharacter function)
-- [ ] T031 [P] [US2] Create integration test for character CRUD operations in tests/integration/characters.test.ts (create character, list characters for script, access control)
-- [ ] T032 [P] [US2] Create contract test for GET /api/scripts/[id]/characters in tests/contract/api/characters.test.ts
-- [ ] T033 [P] [US2] Create contract test for POST /api/scripts/[id]/characters in tests/contract/api/characters.test.ts
+- [x] T028 [P] [US2] Create unit test for character service in tests/unit/characters/service.test.ts (createCharacter, getCharactersByScript functions)
+- [x] T029 [P] [US2] Create unit test for character validation in tests/unit/characters/validation.test.ts (createCharacterSchema validation)
+- [x] T030 [P] [US2] Create unit test for character access control in tests/unit/characters/access.test.ts (canAccessCharacter function)
+- [x] T031 [P] [US2] Create integration test for character CRUD operations in tests/integration/characters.test.ts (create character, list characters for script, access control)
+- [x] T032 [P] [US2] Create contract test for GET /api/scripts/[id]/characters in tests/contract/api/characters.test.ts
+- [x] T033 [P] [US2] Create contract test for POST /api/scripts/[id]/characters in tests/contract/api/characters.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T034 [P] [US2] Create character validation schema in src/lib/characters/validation.ts (createCharacterSchema with Zod)
-- [ ] T035 [P] [US2] Create character access control utility in src/lib/characters/access.ts (canAccessCharacter function that uses canAccessScript)
-- [ ] T036 [US2] Create character service in src/lib/characters/service.ts (createCharacter, getCharactersByScript functions with access control)
-- [ ] T037 [US2] Create GET /api/scripts/[id]/characters route in src/app/api/scripts/[id]/characters/route.ts (list characters for script with access control)
-- [ ] T038 [US2] Create POST /api/scripts/[id]/characters route in src/app/api/scripts/[id]/characters/route.ts (create character with access control)
-- [ ] T039 [US2] Add error handling and logging for character operations in service and API routes
-- [ ] T040 [US2] Add authentication checks to all character API routes (use existing auth() from @/lib/auth)
-- [ ] T041 [US2] Extend Character type in src/typedefs/api.ts (export Character type from schema)
+- [x] T034 [P] [US2] Create character validation schema in src/lib/characters/validation.ts (createCharacterSchema with Zod)
+- [x] T035 [P] [US2] Create character access control utility in src/lib/characters/access.ts (canAccessCharacter function that uses canAccessScript)
+- [x] T036 [US2] Create character service in src/lib/characters/service.ts (createCharacter, getCharactersByScript functions with access control)
+- [x] T037 [US2] Create GET /api/scripts/[id]/characters route in src/app/api/scripts/[id]/characters/route.ts (list characters for script with access control)
+- [x] T038 [US2] Create POST /api/scripts/[id]/characters route in src/app/api/scripts/[id]/characters/route.ts (create character with access control)
+- [x] T039 [US2] Add error handling and logging for character operations in service and API routes
+- [x] T040 [US2] Add authentication checks to all character API routes (use existing auth() from @/lib/auth)
+- [x] T041 [US2] Extend Character type in src/typedefs/api.ts (export Character type from schema)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently. Users can create scenes and characters for scripts they have access to, and all access control is enforced.
 
@@ -118,24 +118,24 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T042 [P] [US3] Create unit test for line service in tests/unit/lines/service.test.ts (createLine, getLinesByScene functions with optional characterId)
-- [ ] T043 [P] [US3] Create unit test for line validation in tests/unit/lines/validation.test.ts (createLineSchema validation with optional characterId)
-- [ ] T044 [P] [US3] Create unit test for line access control in tests/unit/lines/access.test.ts (canAccessLine function)
-- [ ] T045 [P] [US3] Create integration test for line CRUD operations in tests/integration/lines.test.ts (create line with character, create line without character, list lines for scene, character/scene same script validation)
-- [ ] T046 [P] [US3] Create integration test for character deletion behavior in tests/integration/lines.test.ts (verify characterId set to null when character deleted)
-- [ ] T047 [P] [US3] Create contract test for GET /api/scenes/[id]/lines in tests/contract/api/lines.test.ts
-- [ ] T048 [P] [US3] Create contract test for POST /api/scenes/[id]/lines in tests/contract/api/lines.test.ts
+- [x] T042 [P] [US3] Create unit test for line service in tests/unit/lines/service.test.ts (createLine, getLinesByScene functions with optional characterId)
+- [x] T043 [P] [US3] Create unit test for line validation in tests/unit/lines/validation.test.ts (createLineSchema validation with optional characterId)
+- [x] T044 [P] [US3] Create unit test for line access control in tests/unit/lines/access.test.ts (canAccessLine function)
+- [x] T045 [P] [US3] Create integration test for line CRUD operations in tests/integration/lines.test.ts (create line with character, create line without character, list lines for scene, character/scene same script validation)
+- [x] T046 [P] [US3] Create integration test for character deletion behavior in tests/integration/lines.test.ts (verify characterId set to null when character deleted)
+- [x] T047 [P] [US3] Create contract test for GET /api/scenes/[id]/lines in tests/contract/api/lines.test.ts
+- [x] T048 [P] [US3] Create contract test for POST /api/scenes/[id]/lines in tests/contract/api/lines.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T049 [P] [US3] Create line validation schema in src/lib/lines/validation.ts (createLineSchema with Zod, characterId optional)
-- [ ] T050 [P] [US3] Create line access control utility in src/lib/lines/access.ts (canAccessLine function that uses canAccessScene)
-- [ ] T051 [US3] Create line service in src/lib/lines/service.ts (createLine with optional characterId, getLinesByScene functions with character/scene same script validation)
-- [ ] T052 [US3] Create GET /api/scenes/[id]/lines route in src/app/api/scenes/[id]/lines/route.ts (list lines for scene with access control)
-- [ ] T053 [US3] Create POST /api/scenes/[id]/lines route in src/app/api/scenes/[id]/lines/route.ts (create line with optional characterId, character/scene same script validation)
-- [ ] T054 [US3] Add error handling and logging for line operations in service and API routes
-- [ ] T055 [US3] Add authentication checks to all line API routes (use existing auth() from @/lib/auth)
-- [ ] T056 [US3] Extend Line type in src/typedefs/api.ts (export Line type from schema with nullable characterId)
+- [x] T049 [P] [US3] Create line validation schema in src/lib/lines/validation.ts (createLineSchema with Zod, characterId optional)
+- [x] T050 [P] [US3] Create line access control utility in src/lib/lines/access.ts (canAccessLine function that uses canAccessScene)
+- [x] T051 [US3] Create line service in src/lib/lines/service.ts (createLine with optional characterId, getLinesByScene functions with character/scene same script validation)
+- [x] T052 [US3] Create GET /api/scenes/[id]/lines route in src/app/api/scenes/[id]/lines/route.ts (list lines for scene with access control)
+- [x] T053 [US3] Create POST /api/scenes/[id]/lines route in src/app/api/scenes/[id]/lines/route.ts (create line with optional characterId, character/scene same script validation)
+- [x] T054 [US3] Add error handling and logging for line operations in service and API routes
+- [x] T055 [US3] Add authentication checks to all line API routes (use existing auth() from @/lib/auth)
+- [x] T056 [US3] Extend Line type in src/typedefs/api.ts (export Line type from schema with nullable characterId)
 
 **Checkpoint**: At this point, all user stories should be independently functional. Users can create scenes, characters, and lines for scripts they have access to. Lines can exist without character associations, and when characters are deleted, lines have their characterId set to null.
 
@@ -145,15 +145,15 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T057 [P] Verify cascade deletion behavior: script deletion removes all scenes, characters, and lines
-- [ ] T058 [P] Verify cascade deletion behavior: scene deletion removes all lines
-- [ ] T059 [P] Verify set null behavior: character deletion sets characterId to null for all lines
-- [ ] T060 [P] Run performance tests for SC-004 (query 100 scenes <500ms), SC-005 (query 50 characters <500ms), SC-006 (query 500 lines <1s)
-- [ ] T061 [P] Add structured logging for all scene, character, and line operations
-- [ ] T062 [P] Review and update documentation in quickstart.md if implementation differs
-- [ ] T063 [P] Code cleanup and refactoring across all service modules
-- [ ] T064 [P] Verify all error messages are user-friendly and don't leak sensitive information
-- [ ] T065 [P] Run quickstart.md validation to ensure all examples work correctly
+- [ ] T057 [P] Verify cascade deletion behavior: script deletion removes all scenes, characters, and lines (REQUIRES DB TESTING)
+- [ ] T058 [P] Verify cascade deletion behavior: scene deletion removes all lines (REQUIRES DB TESTING)
+- [ ] T059 [P] Verify set null behavior: character deletion sets characterId to null for all lines (REQUIRES DB TESTING)
+- [ ] T060 [P] Run performance tests for SC-004 (query 100 scenes <500ms), SC-005 (query 50 characters <500ms), SC-006 (query 500 lines <1s) (REQUIRES RUNTIME TESTING)
+- [x] T061 [P] Add structured logging for all scene, character, and line operations
+- [x] T062 [P] Review and update documentation in quickstart.md if implementation differs
+- [x] T063 [P] Code cleanup and refactoring across all service modules
+- [x] T064 [P] Verify all error messages are user-friendly and don't leak sensitive information
+- [ ] T065 [P] Run quickstart.md validation to ensure all examples work correctly (REQUIRES RUNTIME TESTING)
 
 ---
 
@@ -274,4 +274,3 @@ With multiple developers:
 - Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence
 - User Stories 1 and 2 (both P1) can be implemented in parallel after Foundational phase
 - User Story 3 requires scenes and characters to exist, but can be tested independently with test data
-

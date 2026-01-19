@@ -1,5 +1,5 @@
 import { InferSelectModel } from "drizzle-orm";
-import { troupes, troupeMemberships, users, scripts } from "@/lib/db/schema";
+import { troupes, troupeMemberships, users, scripts, scenes, characters, lines } from "@/lib/db/schema";
 
 /**
  * Base database entity types
@@ -8,6 +8,9 @@ export type Troupe = InferSelectModel<typeof troupes>;
 export type TroupeMembership = InferSelectModel<typeof troupeMemberships>;
 export type User = InferSelectModel<typeof users>;
 export type Script = InferSelectModel<typeof scripts>;
+export type Scene = InferSelectModel<typeof scenes>;
+export type Character = InferSelectModel<typeof characters>;
+export type Line = InferSelectModel<typeof lines>;
 
 /**
  * Extended types for API responses
@@ -152,6 +155,66 @@ export type DeleteScriptResponse = ApiResponse<{
 }>;
 
 /**
+ * Scene API Response Types
+ */
+
+/**
+ * GET /api/scripts/[id]/scenes
+ * Returns a list of scenes for a script
+ */
+export type GetScenesResponse = ApiResponse<{
+  scenes: Scene[];
+}>;
+
+/**
+ * POST /api/scripts/[id]/scenes
+ * Creates a new scene in a script
+ */
+export type CreateSceneResponse = ApiResponse<{
+  scene: Scene;
+}>;
+
+/**
+ * Character API Response Types
+ */
+
+/**
+ * GET /api/scripts/[id]/characters
+ * Returns a list of characters for a script
+ */
+export type GetCharactersResponse = ApiResponse<{
+  characters: Character[];
+}>;
+
+/**
+ * POST /api/scripts/[id]/characters
+ * Creates a new character in a script
+ */
+export type CreateCharacterResponse = ApiResponse<{
+  character: Character;
+}>;
+
+/**
+ * Line API Response Types
+ */
+
+/**
+ * GET /api/scenes/[id]/lines
+ * Returns a list of lines for a scene
+ */
+export type GetLinesResponse = ApiResponse<{
+  lines: Line[];
+}>;
+
+/**
+ * POST /api/scenes/[id]/lines
+ * Creates a new line in a scene
+ */
+export type CreateLineResponse = ApiResponse<{
+  line: Line;
+}>;
+
+/**
  * Auth API Response Types
  */
 
@@ -178,5 +241,11 @@ export type ApiSuccessResponse =
   | GetScriptResponse
   | UpdateScriptResponse
   | DeleteScriptResponse
+  | GetScenesResponse
+  | CreateSceneResponse
+  | GetCharactersResponse
+  | CreateCharacterResponse
+  | GetLinesResponse
+  | CreateLineResponse
   | SignupResponse;
 
